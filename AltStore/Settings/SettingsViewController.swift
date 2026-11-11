@@ -122,6 +122,7 @@ final class SettingsViewController: UITableViewController
     // Add outlet
     @IBOutlet private var betaTrackLabel: UILabel!
     @IBOutlet private var betaTrackPopupButton: UIButton!
+    private var releaseChannelOptions: [String] = []
 
     private var debugGestureCounter = 0
     private weak var debugGestureTimer: Timer?
@@ -180,6 +181,16 @@ final class SettingsViewController: UITableViewController
         betaTrackPopupButton.setTitle(channel, for: .normal)
     }
     
+    private func presentReleaseChannelList() {
+        let current = UserDefaults.standard.betaUdpatesTrack ?? UserDefaults.defaultBetaUpdatesTrack
+        let items = self.releaseChannelOptions.map { channel in
+            SiloListItem(title: channel, isSelected: channel == current) { [weak self] in
+                self?.handleReleaseChannelSelection(channel)
+            }
+        }
+        SiloListbox.present(title: NSLocalizedString("Release channel", comment: ""), items: items)
+    }
+    
     private func configureReleaseChannelButton() {
         let currentTrack = UserDefaults.standard.betaUdpatesTrack
         
@@ -191,24 +202,14 @@ final class SettingsViewController: UITableViewController
             trackOptions = [currentTrack] + trackOptions.filter { $0 != currentTrack }
         }
     
-        // Create menu items with proper styling
-        let items = trackOptions.map{ channel in
-            UIAction(title: channel, handler: { [weak self] _ in
-                self?.handleReleaseChannelSelection(channel)
-            })
-        }
+        self.releaseChannelOptions = trackOptions
         
-        // Create menu with proper styling
-        let menu = UIMenu(title: "",
-                         options: [.singleSelection, .displayInline], // Add displayInline
-                         children: items
-        )
         #if !os(tvOS)
-        betaTrackPopupButton.menu = menu
-        #else
-        if #available(tvOS 17.0, *) {
-            betaTrackPopupButton.menu = menu
-        }
+        self.betaTrackPopupButton.menu = nil
+        self.betaTrackPopupButton.showsMenuAsPrimaryAction = false
+        self.betaTrackPopupButton.addAction(UIAction { [weak self] _ in
+            self?.presentReleaseChannelList()
+        }, for: .touchUpInside)
         #endif
 
         // Set initial state

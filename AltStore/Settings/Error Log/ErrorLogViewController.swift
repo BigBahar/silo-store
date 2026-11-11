@@ -308,16 +308,16 @@ extension ErrorLogViewController
         let loggedError = self.dataSource.item(at: indexPath)
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
             return UIMenu(title: "", children: [
-                UIAction(title: NSLocalizedString("Copy Error Message", comment: ""), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
+                UIAction.silo(title: NSLocalizedString("Copy Error Message", comment: ""), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
                     self?.copyErrorMessage(for: loggedError)
                 },
-                UIAction(title: NSLocalizedString("Copy Error Code", comment: ""), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
+                UIAction.silo(title: NSLocalizedString("Copy Error Code", comment: ""), image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
                     self?.copyErrorCode(for: loggedError)
                 },
-                UIAction(title: NSLocalizedString("Search FAQ", comment: ""), image: UIImage(systemName: "magnifyingglass")) { [weak self] _ in
+                UIAction.silo(title: NSLocalizedString("Search FAQ", comment: ""), image: UIImage(systemName: "magnifyingglass")) { [weak self] _ in
                     self?.searchFAQ(for: loggedError)
                 },
-                UIAction(title: NSLocalizedString("View More Details", comment: ""), image: UIImage(systemName: "ellipsis.circle")) { [weak self] _ in
+                UIAction.silo(title: NSLocalizedString("View More Details", comment: ""), image: UIImage(systemName: "ellipsis.circle")) { [weak self] _ in
                     self?.viewMoreDetails(for: loggedError)
                 },
             ])

@@ -230,6 +230,9 @@ struct SiloListItem
     var systemImage: String? = nil
     var isSelected = false
     var isDestructive = false
+    var isEnabled = true
+    /// A caption row that groups the rows below it; not tappable.
+    var isHeader = false
     var action: () -> Void
 }
 
@@ -287,13 +290,27 @@ private final class SiloListRow: UIControl
             row.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -SiloSpace.s4),
             row.topAnchor.constraint(equalTo: self.topAnchor, constant: SiloSpace.s2),
             row.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -SiloSpace.s2),
-            self.heightAnchor.constraint(greaterThanOrEqualToConstant: 52)
+            self.heightAnchor.constraint(greaterThanOrEqualToConstant: item.isHeader ? 36 : 52)
         ])
 
         self.isAccessibilityElement = true
         self.accessibilityLabel = item.title
         self.accessibilityValue = item.detail
-        self.accessibilityTraits = item.isSelected ? [.button, .selected] : .button
+        if item.isHeader
+        {
+            self.accessibilityTraits = .header
+            self.isUserInteractionEnabled = false
+        }
+        else
+        {
+            var traits: UIAccessibilityTraits = item.isSelected ? [.button, .selected] : .button
+            if !item.isEnabled
+            {
+                traits.insert(.notEnabled)
+                self.isEnabled = false
+            }
+            self.accessibilityTraits = traits
+        }
 
         self.updateAppearance()
     }
@@ -319,8 +336,10 @@ private final class SiloListRow: UIControl
         let textColor = self.item.isDestructive ? look.danger : look.text
 
         self.backgroundColor = self.isHighlighted ? look.raised : .clear
-        self.titleLabel.textColor = textColor
+        self.titleLabel.textColor = self.item.isHeader ? look.textFaint : textColor
+        self.titleLabel.font = self.item.isHeader ? SiloFont.uiFont(.caption) : SiloFont.uiFont(.body)
         self.detailLabel.textColor = look.textMuted
+        self.alpha = self.item.isEnabled ? 1 : 0.4
         self.checkView.tintColor = look.accent
         self.iconView.tintColor = self.item.isDestructive ? look.danger : look.textMuted
 
@@ -514,7 +533,7 @@ final class SiloListboxViewController: UIViewController
 
     private func select(index: Int)
     {
-        guard self.items.indices.contains(index) else { return }
+        guard self.items.indices.contains(index), !self.items[index].isHeader, self.items[index].isEnabled else { return }
         UISelectionFeedbackGenerator().selectionChanged()
         let action = self.items[index].action
         self.closeAnimated(completion: action)
@@ -581,16 +600,17 @@ final class SiloListboxViewController: UIViewController
 
     private func moveFocus(by offset: Int)
     {
-        guard !self.rows.isEmpty else { return }
+        let selectable = self.items.indices.filter { !self.items[$0].isHeader && self.items[$0].isEnabled }
+        guard !selectable.isEmpty else { return }
 
         let next: Int
-        if let current = self.focusedIndex
+        if let current = self.focusedIndex, let position = selectable.firstIndex(of: current)
         {
-            next = min(max(current + offset, 0), self.rows.count - 1)
+            next = selectable[min(max(position + offset, 0), selectable.count - 1)]
         }
         else
         {
-            next = offset > 0 ? 0 : self.rows.count - 1
+            next = offset > 0 ? selectable[0] : selectable[selectable.count - 1]
         }
 
         self.focusedIndex = next

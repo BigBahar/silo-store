@@ -107,20 +107,6 @@ class BrowseViewController: UICollectionViewController
         self.collectionView.refreshControl = refreshControl
         #endif
         
-        #if !os(tvOS)
-        if self.category != nil, #available(iOS 16, *)
-        {
-            let categoriesMenu = UIMenu(children: [
-                UIDeferredMenuElement.uncached { [weak self] completion in
-                    let actions = self?.makeCategoryActions() ?? []
-                    completion(actions)
-                }
-            ])
-            
-            self.navigationItem.titleMenuProvider = { _ in categoriesMenu }
-        }
-        #endif
-        
         self.titleSourceIconView = AppIconImageView(style: .circular)
         
         self.titleCategoryIconView = UIImageView(frame: .zero)
@@ -132,6 +118,10 @@ class BrowseViewController: UICollectionViewController
         self.titleStackView = UIStackView(arrangedSubviews: [self.titleSourceIconView, self.titleCategoryIconView, self.titleLabel])
         self.titleStackView.spacing = 4
         self.titleStackView.translatesAutoresizingMaskIntoConstraints = false
+        self.titleStackView.isUserInteractionEnabled = true
+        self.titleStackView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(BrowseViewController.presentCategoryList)))
+        self.titleStackView.isAccessibilityElement = true
+        self.titleStackView.accessibilityTraits = .button
         
         #if !os(tvOS)
         self.navigationItem.largeTitleDisplayMode = .never
@@ -439,7 +429,15 @@ private extension BrowseViewController
         }
     }
     
-    func makeCategoryActions() -> [UIAction]
+    @objc func presentCategoryList()
+    {
+        guard self.category != nil else { return }
+        
+        let items = self.makeCategoryItems()
+        SiloListbox.present(title: NSLocalizedString("Category", comment: ""), items: items)
+    }
+    
+    func makeCategoryItems() -> [SiloListItem]
     {
         let handler = { [weak self] (category: StoreCategory) in
             self?.category = category
@@ -468,15 +466,13 @@ private extension BrowseViewController
                 sortedCategories.move(fromOffsets: [otherIndex], toOffset: sortedCategories.count)
             }
             
-            let actions = sortedCategories.map { category in
-                let state: UIAction.State = (category == self.category) ? .on : .off
-                let image = UIImage(systemName: category.filledSymbolName)?.withTintColor(category.tintColor, renderingMode: .alwaysOriginal)
-                return UIAction(title: category.localizedName, image: image, state: state) { _ in
+            let items = sortedCategories.map { category in
+                SiloListItem(title: category.localizedName, systemImage: category.filledSymbolName, isSelected: category == self.category) {
                     handler(category)
                 }
             }
             
-            return actions
+            return items
         }
         catch
         {
@@ -498,35 +494,12 @@ private extension BrowseViewController
             // UserDefaults.standard.preferredAppSorting = .lastUpdated
         }
         
-        let children = UIDeferredMenuElement.uncached { [weak self] completion in
-            guard let self else { return completion([]) }
-            
-            var sortingOptions = AppSorting.allCases
-            if self.source == nil
-            {
-                // Only allow `default` sorting when source is non-nil.
-                sortingOptions = sortingOptions.filter { $0 != .default }
-            }
-            
-            let actions = sortingOptions.map { sorting in
-                let state: UIMenuElement.State = (sorting == self.preferredAppSorting) ? .on : .off
-                let action = UIAction(title: sorting.localizedName, image: nil, state: state) { action in
-                    self.preferredAppSorting = sorting
-                    UserDefaults.standard.preferredAppSorting = sorting // Update separately to save change.
-                    
-                    self.updateDataSource()
-                }
-                
-                return action
-            }
-            
-            completion(actions)
+        let sortIcon = UIImage(systemName: "arrow.up.arrow.down")
+        let sortAction = UIAction(title: NSLocalizedString("Sort by…", comment: ""), image: sortIcon) { [weak self] _ in
+            self?.presentSortList()
         }
         
-        let sortMenu = UIMenu(title: NSLocalizedString("Sort by…", comment: ""), options: [.singleSelection], children: [children])
-        let sortIcon = UIImage(systemName: "arrow.up.arrow.down")
-        
-        let sortButton = UIBarButtonItem(title: NSLocalizedString("Sort by…", comment: ""), image: sortIcon, primaryAction: nil, menu: sortMenu)
+        let sortButton = UIBarButtonItem(title: NSLocalizedString("Sort by…", comment: ""), image: sortIcon, primaryAction: sortAction, menu: nil)
         self.sortButton = sortButton
         
         self.navigationItem.rightBarButtonItems = [sortButton]
@@ -535,6 +508,28 @@ private extension BrowseViewController
 
 private extension BrowseViewController
 {
+    func presentSortList()
+    {
+        var sortingOptions = AppSorting.allCases
+        if self.source == nil
+        {
+            // Only allow `default` sorting when source is non-nil.
+            sortingOptions = sortingOptions.filter { $0 != .default }
+        }
+        
+        let items = sortingOptions.map { sorting in
+            SiloListItem(title: sorting.localizedName, isSelected: sorting == self.preferredAppSorting) { [weak self] in
+                guard let self else { return }
+                self.preferredAppSorting = sorting
+                UserDefaults.standard.preferredAppSorting = sorting // Update separately to save change.
+                
+                self.updateDataSource()
+            }
+        }
+        
+        SiloListbox.present(title: NSLocalizedString("Sort by…", comment: ""), items: items)
+    }
+    
     @IBAction func performAppAction(_ sender: PillButton)
     {
         let point = self.collectionView.convert(sender.center, from: sender.superview)
