@@ -23,6 +23,11 @@ final class SettingsHeaderFooterView: UITableViewHeaderFooterView
         
         self.contentView.layoutMargins = .zero
         self.contentView.preservesSuperviewLayoutMargins = true
+
+        self.primaryLabel.font = SiloFont.uiFont(size: 12, weight: 600, style: .caption1)
+        self.primaryLabel.textColor = SiloColor.textFaint
+        self.secondaryLabel.font = SiloFont.uiFont(.caption)
+        self.secondaryLabel.textColor = SiloColor.textFaint
         
         self.stackView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(self.stackView)

@@ -17,12 +17,14 @@ final class InstalledAppsCollectionHeaderView: UICollectionReusableView
     {
         self.textLabel = UILabel()
         self.textLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.textLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        self.textLabel.font = SiloFont.uiFont(.title)
+        self.textLabel.textColor = SiloColor.text
         self.textLabel.accessibilityTraits.insert(.header)
         
         self.button = UIButton(type: .system)
         self.button.translatesAutoresizingMaskIntoConstraints = false
-        self.button.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        self.button.titleLabel?.font = SiloFont.uiFont(.label)
+        self.button.tintColor = SiloColor.accent
         
         super.init(frame: frame)
         

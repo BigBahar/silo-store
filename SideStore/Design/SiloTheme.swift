@@ -207,7 +207,9 @@ enum SiloAppearance
         tabItem.selected.titleTextAttributes = [.font: tabFont, .foregroundColor: SiloColor.accent]
 
         let tabBar = UITabBarAppearance()
-        tabBar.configureWithDefaultBackground()
+        tabBar.configureWithOpaqueBackground()
+        tabBar.backgroundColor = SiloColor.ground
+        tabBar.shadowColor = SiloColor.border
         tabBar.stackedLayoutAppearance = tabItem
         tabBar.inlineLayoutAppearance = tabItem
         tabBar.compactInlineLayoutAppearance = tabItem

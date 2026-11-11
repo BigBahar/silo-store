@@ -109,6 +109,12 @@ class AppBannerView: NibView
         self.stackView.preservesSuperviewLayoutMargins = true
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?)
+    {
+        super.traitCollectionDidChange(previousTraitCollection)
+        self.update()
+    }
+    
     override func tintColorDidChange()
     {
         super.tintColorDidChange()
@@ -366,28 +372,36 @@ extension AppBannerView
 
 private extension AppBannerView
 {
+    /// A flat Silo row: raised surface, hairline border, one accent.
     func update()
     {
-        self.clipsToBounds = true
-        self.layer.cornerRadius = 22
+        let look = SiloTheme.look(for: self.traitCollection.userInterfaceStyle)
         
-        let tintColor = self.originalTintColor ?? self.tintColor
-        self.subtitleLabel.textColor = tintColor
+        self.clipsToBounds = true
+        self.layer.cornerRadius = look.radiusRow
+        self.layer.borderWidth = 1
+        self.layer.borderColor = look.border.cgColor
+        
+        self.titleLabel.font = SiloFont.uiFont(.headline)
+        self.titleLabel.textColor = look.text
+        self.subtitleLabel.font = SiloFont.uiFont(.caption)
+        self.subtitleLabel.textColor = look.textMuted
+        
+        self.backgroundEffectView.effect = nil
+        self.backgroundEffectView.contentView.backgroundColor = look.raised
+        self.backgroundEffectView.backgroundColor = look.raised
+        self.vibrancyView.effect = nil
         
         switch self.style
         {
         case .app:
             self.directionalLayoutMargins.trailing = self.stackView.directionalLayoutMargins.trailing
             
-            self.iconImageViewHeightConstraint.constant = 60
+            self.iconImageViewHeightConstraint.constant = 52
             self.iconImageView.style = .icon
             
-            self.titleLabel.textColor = .label
-            
             self.button.style = .pill
-            
-            self.backgroundEffectView.contentView.backgroundColor = UIColor(resource: .blurTint)
-            self.backgroundEffectView.backgroundColor = tintColor
+            self.button.tintColor = look.accent
             
         case .source:
             self.directionalLayoutMargins.trailing = 20
@@ -395,29 +409,7 @@ private extension AppBannerView
             self.iconImageViewHeightConstraint.constant = 44
             self.iconImageView.style = .circular
             
-            self.titleLabel.textColor = .white
-            
             self.button.style = .custom
-            
-            self.backgroundEffectView.contentView.backgroundColor = tintColor?.adjustedForDisplay
-            self.backgroundEffectView.backgroundColor = nil
-            
-            #if !os(tvOS)
-            if let tintColor, tintColor.isTooBright
-            {
-                let textVibrancyEffect = UIVibrancyEffect(blurEffect: .init(style: .systemChromeMaterialLight), style: .fill)
-                self.vibrancyView.effect = textVibrancyEffect
-            }
-            else
-            {
-                // Thinner == more dull
-                let textVibrancyEffect = UIVibrancyEffect(blurEffect: .init(style: .systemThinMaterialDark), style: .secondaryLabel)
-                self.vibrancyView.effect = textVibrancyEffect
-            }
-            #else
-            let textVibrancyEffect = UIVibrancyEffect(blurEffect: UIBlurEffect(style: .dark))
-            self.vibrancyView.effect = textVibrancyEffect
-            #endif
         }
     }
 }

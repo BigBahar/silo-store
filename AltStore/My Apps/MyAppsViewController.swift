@@ -318,6 +318,48 @@ private extension MyAppsViewController
         return dataSource
     }
     
+    /// The headline for the top of My Apps: how the apps are doing, and when it next matters.
+    func statusSummary() -> (headline: String, detail: String)
+    {
+        let apps = self.activeAppsDataSource.fetchedResultsController.fetchedObjects ?? []
+        
+        guard let soonest = apps.map({ $0.expirationDate }).min() else {
+            return (NSLocalizedString("No apps yet", comment: ""), NSLocalizedString("Install an app from Browse.", comment: ""))
+        }
+        
+        let now = Date()
+        let day: TimeInterval = 24 * 60 * 60
+        let needRefresh = apps.filter { $0.expirationDate.timeIntervalSince(now) < 2 * day }.count
+        let remaining = soonest.timeIntervalSince(now)
+        
+        let headline: String
+        if needRefresh == 0
+        {
+            headline = NSLocalizedString("All apps fresh", comment: "")
+        }
+        else
+        {
+            headline = String(format: NSLocalizedString("%d need a refresh", comment: ""), needRefresh)
+        }
+        
+        let detail: String
+        if remaining <= 0
+        {
+            detail = NSLocalizedString("An app has expired. Refresh it now.", comment: "")
+        }
+        else if remaining < day
+        {
+            detail = String(format: NSLocalizedString("Next expiry in %d hours", comment: ""), max(1, Int(remaining / 3600)))
+        }
+        else
+        {
+            let days = Int(remaining / day)
+            detail = String(format: NSLocalizedString("Next expiry in %d days", comment: ""), days)
+        }
+        
+        return (headline, detail)
+    }
+    
     func makeNoUpdatesDataSource() -> DynamicCollectionViewDataSource<InstalledApp>
     {
         let dynamicDataSource = DynamicCollectionViewDataSource<InstalledApp>()
@@ -329,22 +371,14 @@ private extension MyAppsViewController
             cell.layoutMargins.left = self.view.layoutMargins.left
             cell.layoutMargins.right = self.view.layoutMargins.right
             
-            cell.blurView.layer.cornerRadius = 20
-            cell.blurView.layer.masksToBounds = true
-            cell.blurView.backgroundColor = .altPrimary
-            
             cell.button.addTarget(self, action: #selector(MyAppsViewController.showHiddenUpdatesAlert(_:)), for: .primaryActionTriggered)
+            cell.button.isHidden = true
             
-            if !self.unsupportedUpdates.isEmpty
-            {
-                cell.textLabel.text = NSLocalizedString("Unsupported Updates Available", comment: "")
-                cell.button.isHidden = false
-            }
-            else
-            {
-                cell.textLabel.text = NSLocalizedString("No Updates Available", comment: "")
-                cell.button.isHidden = true
-            }
+            let status = self.statusSummary()
+            cell.headlineLabel.text = status.headline
+            cell.detailLabel.text = status.detail
+            cell.setRefreshing(self.isRefreshingAllApps)
+            cell.refreshButton.addTarget(self, action: #selector(MyAppsViewController.refreshAllApps(_:)), for: .primaryActionTriggered)
         }
         
         return dynamicDataSource
@@ -494,6 +528,7 @@ private extension MyAppsViewController
             let isExpired = currentDate > installedApp.expirationDate
             cell.bannerView.buttonLabel.isHidden = isExpired || installedApp.certificateStatus == .revoked
             cell.bannerView.buttonLabel.text = NSLocalizedString("Expires in", comment: "")
+            cell.setExpiry(remaining: installedApp.expirationDate.timeIntervalSince(currentDate))
             
             cell.bannerView.button.removeTarget(self, action: nil, for: .primaryActionTriggered)
             cell.bannerView.button.addTarget(self, action: #selector(MyAppsViewController.refreshApp(_:)), for: .primaryActionTriggered)
@@ -561,6 +596,7 @@ private extension MyAppsViewController
                 cell.bannerView.iconImageView.isIndicatingActivity = true
             }
             cell.bannerView.buttonLabel.isHidden = true
+            cell.hideExpiry()
             cell.bannerView.alpha = 1.0
             
             cell.deactivateBadge?.isHidden = true
@@ -1797,6 +1833,8 @@ extension MyAppsViewController
                     headerView.textLabel.text = NSLocalizedString("Active", comment: "")
                 }
                 
+                // The status block above carries the primary Refresh all; this one is for when updates replace it.
+                headerView.button.isHidden = self.updatesDataSource.itemCount == 0
                 headerView.button.isIndicatingActivity = false
                 headerView.button.activityIndicatorView.color = .altPrimary
                 headerView.button.setTitle(NSLocalizedString("Refresh All", comment: ""), for: .normal)
@@ -2231,7 +2269,7 @@ extension MyAppsViewController: UICollectionViewDelegateFlowLayout
         switch section
         {
         case .noUpdates:
-            let size = CGSize(width: collectionView.bounds.width, height: 44)
+            let size = CGSize(width: collectionView.bounds.width, height: 168)
             return size
             
         case .updates:

@@ -248,6 +248,8 @@
 			</array>
 		</dict>
 	</dict>
+	<key>UIDesignRequiresCompatibility</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Rubik.ttf</string>

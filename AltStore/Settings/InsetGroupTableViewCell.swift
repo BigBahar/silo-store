@@ -43,21 +43,26 @@ final class InsetGroupTableViewCell: UITableViewCell
         self.selectionStyle = .none
         
         self.separatorView.translatesAutoresizingMaskIntoConstraints = false
-        self.separatorView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+        self.separatorView.backgroundColor = SiloColor.border
         self.addSubview(self.separatorView)
         
         self.insetView.layer.masksToBounds = true
-        self.insetView.layer.cornerRadius = 16
+        self.insetView.layer.cornerRadius = 0
+
+        self.textLabel?.font = SiloFont.uiFont(.body)
+        self.textLabel?.textColor = SiloColor.text
+        self.detailTextLabel?.font = SiloFont.uiFont(.label)
+        self.detailTextLabel?.textColor = SiloColor.textMuted
         
         // Get the preferred background color from Interface Builder.
         self.insetView.backgroundColor = self.backgroundColor
         self.backgroundColor = nil
         
-        self.addSubview(self.insetView, pinningEdgesWith: UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15))
+        self.addSubview(self.insetView, pinningEdgesWith: .zero)
         self.sendSubviewToBack(self.insetView)
         
-        NSLayoutConstraint.activate([self.separatorView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 30),
-                                     self.separatorView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -30),
+        NSLayoutConstraint.activate([self.separatorView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+                                     self.separatorView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
                                      self.separatorView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
                                      self.separatorView.heightAnchor.constraint(equalToConstant: 1)])
         
@@ -122,11 +127,11 @@ private extension InsetGroupTableViewCell
         
         if self.isSelectable && (self.isHighlighted || self.isSelected)
         {
-            self.insetView.backgroundColor = UIColor.white.withAlphaComponent(0.55)
+            self.insetView.backgroundColor = SiloColor.raised
         }
         else
         {
-            self.insetView.backgroundColor = UIColor.white.withAlphaComponent(0.25)
+            self.insetView.backgroundColor = SiloColor.surface
         }
     }
 }

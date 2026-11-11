@@ -34,6 +34,23 @@ COLORS = [
 RADII = [("radiusPanel", "rPanel"), ("radiusRow", "rRow"), ("radiusControl", "rControl")]
 
 
+# Silo Store's dark look: a neutral charcoal ramp instead of the Layers teal.
+# Accent, danger, ok and warn stay Silo's.
+IOS_DARK = {
+    "elev0": "#141416",
+    "elev1": "#1B1B1E",
+    "elev2": "#232327",
+    "elev3": "#2C2C31",
+    "border": "#2E2E33",
+    "borderStrong": "#5A5A62",
+    "text": "#F4F4F5",
+    "textMuted": "#B8B8BE",
+    "textFaint": "#8E8E95",
+    "primaryInk": "#0A0A0B",
+    "accentMuted": "#17363B",
+}
+
+
 def hex_literal(value: str) -> str:
     if not re.fullmatch(r"#[0-9A-Fa-f]{6}", value):
         raise SystemExit(f"expected a #RRGGBB colour, got {value!r}")
@@ -58,6 +75,7 @@ def look(name: str, theme: dict) -> str:
 def main():
     tokens_path = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_TOKENS
     themes = json.loads(tokens_path.read_text(encoding="utf-8"))["theme"]
+    themes["layers"] = {**themes["layers"], **IOS_DARK}
 
     fields = [f"    let {n}: UIColor" for n, _ in COLORS]
     fields += [f"    let {n}: CGFloat" for n, _ in RADII]
@@ -78,7 +96,7 @@ struct SiloLook {{
 }}
 
 extension SiloLook {{
-    /// Dark: deep teal ground, bright cyan accent, rounded.
+    /// Dark: neutral charcoal ground, bright cyan accent, rounded.
 {look("layers", themes["layers"])}
 
     /// Light: paper and ink, square.

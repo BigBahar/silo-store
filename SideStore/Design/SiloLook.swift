@@ -31,20 +31,20 @@ struct SiloLook {
 }
 
 extension SiloLook {
-    /// Dark: deep teal ground, bright cyan accent, rounded.
+    /// Dark: neutral charcoal ground, bright cyan accent, rounded.
     static let layers = SiloLook(
-        ground: UIColor(siloHex: 0x04191E),
-        surface: UIColor(siloHex: 0x0A2B33),
-        raised: UIColor(siloHex: 0x0F3A44),
-        raisedStrong: UIColor(siloHex: 0x164C58),
-        border: UIColor(siloHex: 0x1E5C6A),
-        borderStrong: UIColor(siloHex: 0x6FA6B2),
-        text: UIColor(siloHex: 0xFFFFFF),
-        textMuted: UIColor(siloHex: 0xC4E0E6),
-        textFaint: UIColor(siloHex: 0xAFD2D9),
+        ground: UIColor(siloHex: 0x141416),
+        surface: UIColor(siloHex: 0x1B1B1E),
+        raised: UIColor(siloHex: 0x232327),
+        raisedStrong: UIColor(siloHex: 0x2C2C31),
+        border: UIColor(siloHex: 0x2E2E33),
+        borderStrong: UIColor(siloHex: 0x5A5A62),
+        text: UIColor(siloHex: 0xF4F4F5),
+        textMuted: UIColor(siloHex: 0xB8B8BE),
+        textFaint: UIColor(siloHex: 0x8E8E95),
         accent: UIColor(siloHex: 0x4FF0FF),
-        accentInk: UIColor(siloHex: 0x04191E),
-        accentMuted: UIColor(siloHex: 0x0F3A44),
+        accentInk: UIColor(siloHex: 0x0A0A0B),
+        accentMuted: UIColor(siloHex: 0x17363B),
         danger: UIColor(siloHex: 0xFF9A90),
         ok: UIColor(siloHex: 0x7CF0A0),
         warn: UIColor(siloHex: 0xFFC46B),
