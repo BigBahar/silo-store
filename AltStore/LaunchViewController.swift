@@ -124,6 +124,7 @@ final class LaunchViewController: UIViewController {
             toastView.show(in: self.destinationViewController!.selectedViewController ?? self.destinationViewController!)
         }
         updateKnownSources()
+        StoreSelfUpdater.shared.appDidLaunch()
         splashView.updateStatus(NSLocalizedString("Almost there…", comment: ""))
         didFinishLaunching = true
         

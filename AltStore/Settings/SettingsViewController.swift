@@ -360,7 +360,7 @@ private extension SettingsViewController
         switch StoreSelfUpdater.shared.state
         {
         case .upToDate: break
-        case .updateAvailable, .installing: updateColor = UIColor.systemGreen
+        case .updateAvailable, .connecting, .installing: updateColor = UIColor.systemGreen
         case .failed: updateColor = UIColor.systemRed
         }
 
@@ -389,9 +389,9 @@ private extension SettingsViewController
         switch StoreSelfUpdater.shared.state
         {
         case .updateAvailable, .failed:
-            StoreSelfUpdater.shared.installUpdateIfAvailable(userInitiated: true)
+            StoreSelfUpdater.shared.userRequestedUpdate()
             return
-        case .upToDate, .installing:
+        case .upToDate, .connecting, .installing:
             break
         }
 

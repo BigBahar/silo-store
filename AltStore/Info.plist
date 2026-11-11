@@ -74,6 +74,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
+			<string>Silo Store</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>silostore</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
 			<string>SideStore Backup</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
