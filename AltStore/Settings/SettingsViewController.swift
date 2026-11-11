@@ -74,7 +74,7 @@ extension SettingsViewController
     }
     private enum AdvancedSettingsRow: Int, CaseIterable
     {
-        case sendFeedback           // row 0 - Send Feedback
+        case checkForUpdates        // row 0 - Check for Updates
         case refreshAttempts        // row 1 - View Refresh Attempts
         case refreshSideJITServer   // row 2 - SideJITServer
         case resetPairingFile       // row 3 - Reset Pairing File
@@ -86,7 +86,7 @@ extension SettingsViewController
         case userCustomizations     // row 9 - User Customizations
 
         static var allCases: [AdvancedSettingsRow] {
-            var rows: [AdvancedSettingsRow] = [.sendFeedback, .refreshAttempts, .refreshSideJITServer, .resetPairingFile]
+            var rows: [AdvancedSettingsRow] = [.checkForUpdates, .refreshAttempts, .refreshSideJITServer, .resetPairingFile]
             if !UserDefaults.standard.useOnDeviceAnisette {
                 rows.append(.anisetteServers)
             }
@@ -360,7 +360,7 @@ private extension SettingsViewController
         var updateColor = UIColor.white.withAlphaComponent(0.5)
         switch StoreSelfUpdater.shared.state
         {
-        case .upToDate: break
+        case .upToDate, .checking: break
         case .updateAvailable, .connecting, .installing: updateColor = UIColor.systemGreen
         case .failed: updateColor = UIColor.systemRed
         }
@@ -392,7 +392,7 @@ private extension SettingsViewController
         case .updateAvailable, .failed:
             StoreSelfUpdater.shared.userRequestedUpdate()
             return
-        case .upToDate, .connecting, .installing:
+        case .upToDate, .checking, .connecting, .installing:
             break
         }
 
@@ -968,6 +968,12 @@ extension SettingsViewController
         }
         let cell = super.tableView(tableView, cellForRowAt: effectiveIndexPath)
         
+        if Section.allCases[indexPath.section] == .advancedSettings,
+           AdvancedSettingsRow.allCases[indexPath.row] == .checkForUpdates
+        {
+            cell.textLabel?.text = NSLocalizedString("Check for Updates", comment: "")
+        }
+        
 
         if AppRefreshRow.AllCases().count == 1
         {
@@ -1145,53 +1151,25 @@ extension SettingsViewController
             let row = AdvancedSettingsRow.allCases[indexPath.row]
             switch row
             {
-            case .sendFeedback:
-                let alertController = UIAlertController(title: "Send Feedback", message: "Choose a method to send feedback:", preferredStyle: .actionSheet)
+            case .checkForUpdates:
+                self.tableView.deselectRow(at: indexPath, animated: true)
                 
-                // Option 1: GitHub
-                alertController.addAction(UIAlertAction(title: "GitHub", style: .default) { _ in
-                    self.openWebURL(AppConstants.URLs.sideStoreIssues, preferredTintColor: .altPrimary)
-                })
-                
-                // Option 2: Discord
-                alertController.addAction(UIAlertAction(title: "Discord", style: .default) { _ in
-                    self.openWebURL(AppConstants.URLs.sideStoreDiscord, preferredTintColor: .altPrimary)
-                })
-                
-                #if !os(tvOS)
-                // Option 3: Mail
-                alertController.addAction(UIAlertAction(title: "Send Email", style: .default) { _ in
-                    if MFMailComposeViewController.canSendMail() {
-                        let mailViewController = MFMailComposeViewController()
-                        mailViewController.mailComposeDelegate = self
-                        mailViewController.setToRecipients(["support@sidestore.io"])
-
-                        // TODO: MARKETING_VERSION is going to be set anyways so this needs to be fixed for beta
-                        if let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String {
-                            mailViewController.setSubject("SideStore Beta \(version) Feedback")
-                        } else {
-                            mailViewController.setSubject("SideStore Beta Feedback")
-                        }
-
-                       self.present(mailViewController, animated: true, completion: nil)
-                    } else {
-                      let toastView = ToastView(text: NSLocalizedString("Cannot Send Mail", comment: ""), detailText: nil)
-                      toastView.show(in: self)
+                StoreSelfUpdater.shared.checkNow { [weak self] state in
+                    guard let self else { return }
+                    
+                    let message: String?
+                    switch state
+                    {
+                    case .upToDate: message = NSLocalizedString("Silo Store is up to date", comment: "")
+                    case .failed(let reason): message = String(format: NSLocalizedString("Couldn't check for updates: %@", comment: ""), reason)
+                    default: message = nil
                     }
-                })
-                #endif
-                
-                // Cancel action
-                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-                
-                // For iPad: Set the source view if presenting on iPad to avoid crashes
-                if let popoverController = alertController.popoverPresentationController {
-                    popoverController.sourceView = self.view
-                    popoverController.sourceRect = self.view.bounds
+                    
+                    if let message
+                    {
+                        ToastView(text: message, detailText: nil).show(in: self)
+                    }
                 }
-                
-                // Present the action sheet
-                self.present(alertController, animated: true, completion: nil)
                 
             case .refreshSideJITServer:
                 let jitConfigView = SideJITServerConfigView()

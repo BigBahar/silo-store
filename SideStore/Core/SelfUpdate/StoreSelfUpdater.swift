@@ -19,6 +19,7 @@ final class StoreSelfUpdater
     enum State: Equatable
     {
         case upToDate
+        case checking
         case updateAvailable(version: String)
         case connecting(version: String)
         case installing(version: String)
@@ -61,6 +62,8 @@ final class StoreSelfUpdater
         {
         case .upToDate:
             return NSLocalizedString("Up to date", comment: "")
+        case .checking:
+            return NSLocalizedString("Checking for updates…", comment: "")
         case .updateAvailable(let version):
             return String(format: NSLocalizedString("Update %@ is ready. Tap to install", comment: ""), version)
         case .connecting(let version):
@@ -89,6 +92,40 @@ final class StoreSelfUpdater
         }
     }
 
+    /// Checks the feed now, for the Check for Updates row. Prompts if a newer version is found.
+    func checkNow(completion: @escaping (State) -> Void)
+    {
+        guard !self.isBusy else {
+            completion(self.state)
+            return
+        }
+        
+        self.isBusy = true
+        self.setState(.checking)
+        
+        AppManager.shared.updateAllSources { result in
+            DispatchQueue.main.async {
+                self.isBusy = false
+                
+                switch result
+                {
+                case .failure(let error):
+                    self.setState(.failed(message: error.localizedDescription))
+                case .success:
+                    self.refreshState()
+                    
+                    if case .updateAvailable(let version) = self.state
+                    {
+                        self.lastPromptedVersion = nil
+                        self.promptForUpdate(version: version)
+                    }
+                }
+                
+                completion(self.state)
+            }
+        }
+    }
+    
     /// Call once the app has finished launching.
     func appDidLaunch()
     {
