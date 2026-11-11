@@ -208,7 +208,8 @@ jobs:
           mkdir -p ../shots
           xcrun simctl io "$DEV" screenshot ../shots/launch.png
           # Still running after 6 s means it did not crash on launch.
-          xcrun simctl spawn "$DEV" launchctl list | grep -q com.bigbahar.silolyrics
+          xcrun simctl spawn "$DEV" launchctl list > ../shots/launchctl.txt
+          grep -q com.bigbahar.silolyrics ../shots/launchctl.txt
 
       - uses: actions/upload-artifact@v4
         if: always()
