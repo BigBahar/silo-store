@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "default": [
+    {
+      "identifier": "bigbahar.github.io/silo-store/source.json",
+      "sourceURL": "https://bigbahar.github.io/silo-store/source.json"
+    }
+  ],
+  "blocked": []
+}

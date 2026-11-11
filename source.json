@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "name": "Silo",
+  "subtitle": "Apps by Uri",
+  "description": "Silo Store and the Silo apps.",
+  "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
+  "website": "https://bigbahar.github.io/silo-store/",
+  "tintColor": "#7B3FE4",
+  "apps": [
+    {
+      "name": "Silo Store",
+      "bundleIdentifier": "com.bigbahar.silostore",
+      "developerName": "Uri",
+      "subtitle": "Your own app store",
+      "localizedDescription": "Silo Store installs and refreshes the Silo apps on this iPhone and keeps itself up to date.",
+      "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
+      "tintColor": "#7B3FE4",
+      "releaseChannels": [
+        {
+          "track": "stable",
+          "releases": [
+            {
+              "version": "0.7.0-20261111.1+9db513fb",
+              "date": "2026-11-11T14:57:43Z",
+              "localizedDescription": "Silo Store 0.7.0-20261111.1",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261111.1/SideStore.ipa",
+              "size": 27773105,
+              "sha256": "555f863c03c995a2e497b934044cba5ac5566745df8014eb212ae9d1c5bc42cf"
+            }
+          ]
+        }
+      ],
+      "version": "0.7.0-20261111.1+9db513fb",
+      "versionDate": "2026-11-11T14:57:43Z",
+      "versionDescription": "Silo Store 0.7.0-20261111.1",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261111.1/SideStore.ipa",
+      "size": 27773105,
+      "sha256": "555f863c03c995a2e497b934044cba5ac5566745df8014eb212ae9d1c5bc42cf"
+    }
+  ],
+  "news": []
+}
