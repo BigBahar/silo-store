@@ -251,7 +251,16 @@ public class DatabaseManager: @unchecked Sendable
                     context.delete(previousSource)
                 }
             }
-                        
+
+            // The old SideStore feed is no longer ours; drop it unless something installed came from it.
+            let oldFeedPredicate = NSPredicate(format: "%K == %@", #keyPath(Source.identifier), "sidestore.io/apps-v2.json")
+            if let oldFeed = Source.first(satisfying: oldFeedPredicate, in: context),
+               oldFeed != altStoreSource,
+               !oldFeed.apps.contains(where: { $0.installedApp != nil })
+            {
+                context.delete(oldFeed)
+            }
+
             let serialNumber = CertificateManager.shared.getSigningCertificate(at: Bundle.Info.activeBundleURL)?.serialNumber
             
             let installedApp: InstalledApp
