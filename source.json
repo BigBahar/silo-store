@@ -5,7 +5,7 @@
   "description": "Silo Store and the Silo apps.",
   "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
   "website": "https://bigbahar.github.io/silo-store/",
-  "tintColor": "#7B3FE4",
+  "tintColor": "#22B9CC",
   "apps": [
     {
       "name": "Silo Store",
@@ -14,11 +14,19 @@
       "subtitle": "Your own app store",
       "localizedDescription": "Silo Store installs and refreshes the Silo apps on this iPhone and keeps itself up to date.",
       "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
-      "tintColor": "#7B3FE4",
+      "tintColor": "#22B9CC",
       "releaseChannels": [
         {
           "track": "stable",
           "releases": [
+            {
+              "version": "0.7.0-20261111.6+cc2ffdf7",
+              "date": "2026-11-11T20:53:47Z",
+              "localizedDescription": "Silo Store 0.7.0-20261111.6",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261111.6/SideStore.ipa",
+              "size": 27958559,
+              "sha256": "2f50e46f054eefa15b5bb41631067e1fc60036ecaef7265b72f252f3cf9eeda5"
+            },
             {
               "version": "0.7.0-20261111.5+a3be0a56",
               "date": "2026-11-11T16:58:58Z",
@@ -46,12 +54,12 @@
           ]
         }
       ],
-      "version": "0.7.0-20261111.5+a3be0a56",
-      "versionDate": "2026-11-11T16:58:58Z",
-      "versionDescription": "Silo Store 0.7.0-20261111.5",
-      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261111.5/SideStore.ipa",
-      "size": 27774292,
-      "sha256": "28bf5769f355b259fdb8a2d34c987b54a7bd25d6066f0bd71c4ee9075bb03eb5"
+      "version": "0.7.0-20261111.6+cc2ffdf7",
+      "versionDate": "2026-11-11T20:53:47Z",
+      "versionDescription": "Silo Store 0.7.0-20261111.6",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261111.6/SideStore.ipa",
+      "size": 27958559,
+      "sha256": "2f50e46f054eefa15b5bb41631067e1fc60036ecaef7265b72f252f3cf9eeda5"
     }
   ],
   "news": []
