@@ -166,7 +166,9 @@ jobs:
 
       - name: Package tests
         working-directory: SiloLyrics
-        run: swift test 2>&1 | tee ../swift-test.log
+        run: |
+          set -o pipefail
+          swift test 2>&1 | tee ../swift-test.log
 
       - name: Generate project
         working-directory: SiloLyrics
