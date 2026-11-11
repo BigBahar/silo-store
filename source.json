@@ -68,6 +68,36 @@
       "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261111.8/SideStore.ipa",
       "size": 27964699,
       "sha256": "cda233a45f98669267872780b7034ff1ec4b6fd65b507b363b1be16464552b9e"
+    },
+    {
+      "name": "Silo Lyrics",
+      "bundleIdentifier": "com.bigbahar.silolyrics",
+      "developerName": "Uri",
+      "subtitle": "Synced Spotify lyrics in the Dynamic Island",
+      "localizedDescription": "Shows time-synced lyrics for what you're playing on Spotify, on a full-screen lyrics view and as a Live Activity in the Dynamic Island and on the Lock Screen.",
+      "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
+      "tintColor": "#22B9CC",
+      "releaseChannels": [
+        {
+          "track": "stable",
+          "releases": [
+            {
+              "version": "1.0.14",
+              "date": "2026-11-11T23:21:45Z",
+              "localizedDescription": "Silo Lyrics 1.0.14",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/silolyrics-v1.0.14/SiloLyrics.ipa",
+              "size": 227811,
+              "sha256": "5f2e531f93083cb8bdde18410ce1f265dda4a257767f51c77f15a98a997c6ba7"
+            }
+          ]
+        }
+      ],
+      "version": "1.0.14",
+      "versionDate": "2026-11-11T23:21:45Z",
+      "versionDescription": "Silo Lyrics 1.0.14",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/silolyrics-v1.0.14/SiloLyrics.ipa",
+      "size": 227811,
+      "sha256": "5f2e531f93083cb8bdde18410ce1f265dda4a257767f51c77f15a98a997c6ba7"
     }
   ],
   "news": []
