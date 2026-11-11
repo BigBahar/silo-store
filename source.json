@@ -20,6 +20,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "0.7.0-20261111.2+ed462390",
+              "date": "2026-11-11T15:34:29Z",
+              "localizedDescription": "Silo Store 0.7.0-20261111.2",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261111.2/SideStore.ipa",
+              "size": 27773018,
+              "sha256": "1e198d272568ecb8f43934802d209581b2cbb42bea89ac31c563a628aaa5bd15"
+            },
+            {
               "version": "0.7.0-20261111.1+9db513fb",
               "date": "2026-11-11T14:57:43Z",
               "localizedDescription": "Silo Store 0.7.0-20261111.1",
@@ -30,12 +38,12 @@
           ]
         }
       ],
-      "version": "0.7.0-20261111.1+9db513fb",
-      "versionDate": "2026-11-11T14:57:43Z",
-      "versionDescription": "Silo Store 0.7.0-20261111.1",
-      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261111.1/SideStore.ipa",
-      "size": 27773105,
-      "sha256": "555f863c03c995a2e497b934044cba5ac5566745df8014eb212ae9d1c5bc42cf"
+      "version": "0.7.0-20261111.2+ed462390",
+      "versionDate": "2026-11-11T15:34:29Z",
+      "versionDescription": "Silo Store 0.7.0-20261111.2",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261111.2/SideStore.ipa",
+      "size": 27773018,
+      "sha256": "1e198d272568ecb8f43934802d209581b2cbb42bea89ac31c563a628aaa5bd15"
     }
   ],
   "news": []
