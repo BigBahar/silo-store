@@ -87,7 +87,7 @@ struct SiloToggleStyle: ToggleStyle
 {
     func makeBody(configuration: Configuration) -> some View
     {
-        Button {
+        SwiftUI.Button {
             configuration.isOn.toggle()
             UISelectionFeedbackGenerator().selectionChanged()
         } label: {
@@ -646,7 +646,7 @@ struct SiloPicker<Value: Hashable>: View
 
     var body: some View
     {
-        Button {
+        SwiftUI.Button {
             UISelectionFeedbackGenerator().selectionChanged()
             self.present()
         } label: {
@@ -699,7 +699,7 @@ struct SiloMenu<Content: View>: View
 
     var body: some View
     {
-        Button {
+        SwiftUI.Button {
             UISelectionFeedbackGenerator().selectionChanged()
             let items = self.actions.map { action in
                 SiloListItem(title: action.title, systemImage: action.systemImage, isDestructive: action.isDestructive, action: action.action)
@@ -738,7 +738,7 @@ struct SiloSegmented<Value: Hashable>: View
             ForEach(self.options) { option in
                 let selected = option.value == self.selection
                 let traits: AccessibilityTraits = selected ? [.isButton, .isSelected] : [.isButton]
-                Button {
+                SwiftUI.Button {
                     guard !selected else { return }
                     UISelectionFeedbackGenerator().selectionChanged()
                     self.selection = option.value
