@@ -161,7 +161,13 @@ final class LaunchViewController: UIViewController {
             
             Task.detached { @MainActor [weak self] in
                 guard let self = self else { return }
-                if AppBootManager.shared.needsPairingPrompt {
+                #if DEBUG
+                let isPreviewRun = ProcessInfo.processInfo.arguments.contains("-SiloPreviewTab")
+                #else
+                let isPreviewRun = false
+                #endif
+                
+                if AppBootManager.shared.needsPairingPrompt, !isPreviewRun {
                     await AppBootManager.shared.promptForPairing(on: self)
                 }
                 

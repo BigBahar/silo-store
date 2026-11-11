@@ -10,6 +10,15 @@
 
 extension TabBarController
 {
+    #if DEBUG
+    /// Lets the CI preview job open a given tab: `-SiloPreviewTab <index>`.
+    static var previewTabIndex: Int? {
+        let arguments = ProcessInfo.processInfo.arguments
+        guard let flag = arguments.firstIndex(of: "-SiloPreviewTab"), arguments.indices.contains(flag + 1) else { return nil }
+        return Int(arguments[flag + 1])
+    }
+    #endif
+    
     private enum Tab: Int, CaseIterable
     {
         case news
@@ -55,6 +64,13 @@ final class TabBarController: UITabBarController
         debugLog("[TabBarController] viewDidAppear() — TabBarController is now visible")
         
         _viewDidAppear = true
+        
+        #if DEBUG
+        if let index = Self.previewTabIndex, self.viewControllers?.indices.contains(index) == true
+        {
+            self.selectedIndex = index
+        }
+        #endif
         
         if let (identifier, sender) = self.initialSegue
         {

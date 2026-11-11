@@ -1,0 +1,86 @@
+name: Silo Preview
+
+# Builds the app for the iPhone simulator and screenshots every tab in dark and
+# light, so a restyle can be checked without a phone. Publishes nothing.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: macos-26
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: "26.2"
+
+      - run: brew install xcbeautify
+
+      - name: Restore Cache
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData
+            ~/Library/Caches/org.swift.swiftpm
+          key: silo-preview-cache-${{ github.sha }}
+          restore-keys: silo-preview-cache-
+
+      - name: Build for simulator
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project AltStore.xcodeproj \
+            -scheme SideStore \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -derivedDataPath build/sim \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            ORG_IDENTIFIER=com.bigbahar \
+            | xcbeautify --renderer github-actions
+
+      - name: Save Cache
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            ~/Library/Developer/Xcode/DerivedData
+            ~/Library/Caches/org.swift.swiftpm
+          key: silo-preview-cache-${{ github.sha }}
+
+      - name: Screenshots
+        run: |
+          APP=$(find build/sim/Build/Products -maxdepth 2 -name "SideStore.app" | head -1)
+          BID=$(/usr/libexec/PlistBuddy -c "Print CFBundleIdentifier" "$APP/Info.plist")
+          DEV=$(xcrun simctl list devices available | grep "iPhone 17 Pro (" | head -1 | grep -oE '[0-9A-F]{8}-[0-9A-F-]{27}')
+          echo "app=$APP bundle=$BID device=$DEV"
+
+          xcrun simctl boot "$DEV"
+          xcrun simctl bootstatus "$DEV" -b
+          xcrun simctl install "$DEV" "$APP"
+
+          mkdir -p shots
+          for look in dark light; do
+            xcrun simctl ui "$DEV" appearance $look
+            for tab in 0 1 2 3 4; do
+              xcrun simctl terminate "$DEV" "$BID" || true
+              xcrun simctl launch "$DEV" "$BID" -SiloPreviewTab $tab
+              sleep 12
+              xcrun simctl io "$DEV" screenshot "shots/$look-tab$tab.png"
+            done
+          done
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: preview-shots
+          path: shots
