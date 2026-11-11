@@ -247,7 +247,10 @@ final class SettingsViewController: UITableViewController
         self.versionLabel.attributedText = getVersionAttributedString()
         self.versionLabel.isUserInteractionEnabled = true
         self.versionLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(copyVersionLabelTapped)))
-        
+
+        NotificationCenter.default.addObserver(self, selector: #selector(storeUpdateStateDidChange), name: StoreSelfUpdater.didChangeNotification, object: nil)
+        StoreSelfUpdater.shared.refreshState()
+
         self.versionLabel.numberOfLines = 0
         self.versionLabel.lineBreakMode = .byWordWrapping
         self.versionLabel.setNeedsUpdateConstraints()
@@ -353,12 +356,45 @@ private extension SettingsViewController
             ]
         )
         
+        var updateColor = UIColor.white.withAlphaComponent(0.5)
+        switch StoreSelfUpdater.shared.state
+        {
+        case .upToDate: break
+        case .updateAvailable, .installing: updateColor = UIColor.systemGreen
+        case .failed: updateColor = UIColor.systemRed
+        }
+
+        let updateStatusAttr = NSAttributedString(
+            string: "\n" + StoreSelfUpdater.shared.statusText,
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 12, weight: .semibold),
+                .foregroundColor: updateColor,
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+
         fullString.append(appVersionAttr)
+        fullString.append(updateStatusAttr)
         fullString.append(iosVersionAttr)
         return fullString
     }
-    
+
+    @objc private func storeUpdateStateDidChange() {
+        DispatchQueue.main.async {
+            self.versionLabel.attributedText = self.getVersionAttributedString()
+        }
+    }
+
     @objc private func copyVersionLabelTapped() {
+        switch StoreSelfUpdater.shared.state
+        {
+        case .updateAvailable, .failed:
+            StoreSelfUpdater.shared.installUpdateIfAvailable(userInitiated: true)
+            return
+        case .upToDate, .installing:
+            break
+        }
+
         let appVersion = Bundle.Info.activeBundleVersion
         let iosVersion = "iOS \(UIDevice.current.systemVersion) (\(ProcessInfo.processInfo.operatingSystemBuild))"
         let fullText = "\(appVersion)\n\(iosVersion)"

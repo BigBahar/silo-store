@@ -107,6 +107,11 @@ final class LaunchViewController: UIViewController {
         await AppManager.shared.reconcileInstalledApps()
         splashView.updateStatus(NSLocalizedString("Updating sources…", comment: ""))
         AppManager.shared.updateAllSources { result in
+            if case .success = result
+            {
+                StoreSelfUpdater.shared.sourcesDidUpdate()
+            }
+
             guard case .failure(let error) = result else { return }
             debugLog("Failed to update sources on launch. \(error.localizedDescription)")
             

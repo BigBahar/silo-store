@@ -239,6 +239,18 @@ public class DatabaseManager: @unchecked Sendable
                 storeApp = StoreApp.makeAltStoreApp(version: localAppBundle.version, buildVersion: nil, in: context)
                 storeApp.source = altStoreSource
             }
+
+            // A copy installed before the source moved still points at the old one.
+            if storeApp.source != altStoreSource
+            {
+                let previousSource = storeApp.source
+                storeApp.source = altStoreSource
+
+                if let previousSource, previousSource.sourceURL.host?.hasSuffix("sidestore.io") == true
+                {
+                    context.delete(previousSource)
+                }
+            }
                         
             let serialNumber = CertificateManager.shared.getSigningCertificate(at: Bundle.Info.activeBundleURL)?.serialNumber
             

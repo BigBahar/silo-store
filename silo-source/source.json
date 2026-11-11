@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "name": "Silo",
+  "subtitle": "Apps by Uri",
+  "description": "Silo Store and the Silo apps.",
+  "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
+  "website": "https://bigbahar.github.io/silo-store/",
+  "tintColor": "#7B3FE4",
+  "apps": [
+    {
+      "name": "Silo Store",
+      "bundleIdentifier": "com.bigbahar.silostore",
+      "developerName": "Uri",
+      "subtitle": "Your own app store",
+      "localizedDescription": "Silo Store installs and refreshes the Silo apps on this iPhone and keeps itself up to date.",
+      "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
+      "tintColor": "#7B3FE4",
+      "releaseChannels": []
+    }
+  ],
+  "news": []
+}

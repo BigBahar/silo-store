@@ -456,7 +456,9 @@ extension AppDelegate
             switch result
             {
             case .failure: backgroundFetchCompletionHandler(.failed)
-            case .success: backgroundFetchCompletionHandler(.newData)
+            case .success:
+                StoreSelfUpdater.shared.sourcesDidUpdate()
+                backgroundFetchCompletionHandler(.newData)
             }
             
             if !UserDefaults.standard.isBackgroundRefreshEnabled
