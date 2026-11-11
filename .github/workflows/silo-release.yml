@@ -7,6 +7,13 @@ name: Silo Store Release
 on:
   workflow_dispatch:
     inputs:
+      app:
+        description: Which app to build
+        type: choice
+        default: silostore
+        options:
+          - silostore
+          - silolyrics
       publish:
         description: Publish a release and update the feed (off = just build the IPA as an artifact)
         type: boolean
@@ -29,6 +36,7 @@ permissions:
 
 jobs:
   release:
+    if: ${{ inputs.app != 'silolyrics' }}
     runs-on: ${{ inputs.runner || 'macos-15-intel' }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -125,3 +133,121 @@ jobs:
         with:
           name: SideStore-${{ env.MARKETING_VERSION }}.ipa
           path: SideStore.ipa
+
+  lyrics:
+    # Silo Lyrics: test the package, build an unsigned IPA (SideStore re-signs it), smoke-test it
+    # in the simulator, and optionally publish it to the same source feed.
+    if: ${{ inputs.app == 'silolyrics' }}
+    runs-on: ${{ inputs.runner || 'macos-15-intel' }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      BUNDLE_ID: com.bigbahar.silolyrics
+      SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Xcode
+        uses: maxim-lobanov/setup-xcode@v1.6.0
+        with:
+          xcode-version: "26.2"
+
+      - run: brew install ldid xcodegen xcbeautify
+
+      - name: Config
+        run: |
+          test -n "$SPOTIFY_CLIENT_ID" || { echo "::error::SPOTIFY_CLIENT_ID secret is not set"; exit 1; }
+          printf 'SPOTIFY_CLIENT_ID = %s\n' "$SPOTIFY_CLIENT_ID" > SiloLyrics/Config.xcconfig
+          VERSION="1.0.${{ github.run_number }}"
+          echo "MARKETING_VERSION=$VERSION" | tee -a $GITHUB_ENV
+          echo "RELEASE_TAG=silolyrics-v$VERSION" | tee -a $GITHUB_ENV
+
+      - name: Package tests
+        working-directory: SiloLyrics
+        run: swift test 2>&1 | tee ../swift-test.log
+
+      - name: Generate project
+        working-directory: SiloLyrics
+        run: xcodegen
+
+      - name: Build IPA
+        working-directory: SiloLyrics
+        run: |
+          set -o pipefail
+          xcodebuild archive \
+            -project SiloLyrics.xcodeproj -scheme SiloLyrics -configuration Release \
+            -sdk iphoneos -archivePath build/SiloLyrics.xcarchive \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            MARKETING_VERSION="$MARKETING_VERSION" CURRENT_PROJECT_VERSION="${{ github.run_number }}" \
+            | xcbeautify --renderer github-actions
+          APP=build/SiloLyrics.xcarchive/Products/Applications/SiloLyrics.app
+          ldid -S "$APP/SiloLyrics"
+          for x in "$APP"/PlugIns/*.appex; do ldid -S "$x/$(basename "$x" .appex)"; done
+          rm -rf Payload && mkdir -p Payload && cp -R "$APP" Payload/
+          zip -qr -9 ../SiloLyrics.ipa Payload
+
+      - name: Simulator smoke test
+        working-directory: SiloLyrics
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project SiloLyrics.xcodeproj -scheme SiloLyrics -configuration Debug \
+            -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -derivedDataPath build/sim CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            | xcbeautify --renderer github-actions
+          APP=$(find build/sim/Build/Products -maxdepth 2 -name "SiloLyrics.app" | head -1)
+          DEV=$(xcrun simctl list devices available | grep "iPhone 17 Pro (" | head -1 | grep -oE '[0-9A-F]{8}-[0-9A-F-]{27}')
+          xcrun simctl boot "$DEV" && xcrun simctl bootstatus "$DEV" -b
+          xcrun simctl install "$DEV" "$APP"
+          xcrun simctl launch "$DEV" com.bigbahar.silolyrics
+          sleep 6
+          mkdir -p ../shots
+          xcrun simctl io "$DEV" screenshot ../shots/launch.png
+          # Still running after 6 s means it did not crash on launch.
+          xcrun simctl spawn "$DEV" launchctl list | grep -q com.bigbahar.silolyrics
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: silolyrics-${{ env.MARKETING_VERSION }}
+          path: |
+            SiloLyrics.ipa
+            shots/
+            swift-test.log
+
+      - name: Create Release
+        if: ${{ inputs.publish }}
+        run: |
+          gh release create "$RELEASE_TAG" SiloLyrics.ipa \
+            --target "$GITHUB_SHA" \
+            --title "Silo Lyrics $MARKETING_VERSION" \
+            --notes "Silo Lyrics $MARKETING_VERSION" \
+            --latest=false
+
+      - name: Publish Source Feed
+        if: ${{ inputs.publish }}
+        run: |
+          REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          rm -rf pages
+          git clone --depth 1 --branch gh-pages "$REMOTE" pages
+          cp pages/source.json previous-source.json
+          cp silo-source/* pages/
+          touch pages/.nojekyll
+
+          python3 scripts/ci/silo_source.py \
+            --source pages/source.json \
+            --carry-from previous-source.json \
+            --ipa SiloLyrics.ipa \
+            --bundle-id "$BUNDLE_ID" \
+            --version "$MARKETING_VERSION" \
+            --download-url "https://github.com/${GITHUB_REPOSITORY}/releases/download/${RELEASE_TAG}/SiloLyrics.ipa" \
+            --notes "Silo Lyrics $MARKETING_VERSION"
+
+          cd pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Silo Lyrics $MARKETING_VERSION"
+          git push origin gh-pages
