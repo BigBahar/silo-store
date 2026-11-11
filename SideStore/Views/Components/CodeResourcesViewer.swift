@@ -80,12 +80,10 @@ struct CodeResourcesViewer: View {
                 }
 
                 Section {
-                    Picker("Display Mode", selection: $filterMode) {
-                        ForEach(FilterMode.allCases, id: \.self) { mode in
-                            Text(mode.rawValue).tag(mode)
-                        }
-                    }
-                    .pickerStyle(SegmentedPickerStyle())
+                    SiloSegmented(
+                        selection: $filterMode,
+                        options: FilterMode.allCases.map { SiloOption(value: $0, label: $0.rawValue) }
+                    )
                 }
 
                 if filterMode == .rules {

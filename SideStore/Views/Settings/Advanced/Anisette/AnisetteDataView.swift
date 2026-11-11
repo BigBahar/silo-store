@@ -287,11 +287,10 @@ struct AnisetteDataView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
-                Picker("View Mode", selection: $viewModel.viewMode) {
-                    Text("Interactive").tag(0)
-                    Text("Raw JSON").tag(1)
-                }
-                .pickerStyle(.segmented)
+                SiloSegmented(
+                    selection: $viewModel.viewMode,
+                    options: [SiloOption(value: 0, label: "Interactive"), SiloOption(value: 1, label: "Raw JSON")]
+                )
                 .padding(.horizontal, 16)
                 .padding(.top, 4)
                 

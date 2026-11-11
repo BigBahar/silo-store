@@ -1507,7 +1507,7 @@ private extension MyAppsViewController
     func showAppInfo(_ installedApp: InstalledApp)
     {
         let appInfoView = AppInfoView(installedApp: installedApp)
-        let hostingController = UIHostingController(rootView: appInfoView)
+        let hostingController = SiloHostingController(rootView: appInfoView)
         self.present(hostingController, animated: true, completion: nil)
     }
     

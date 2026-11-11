@@ -79,12 +79,10 @@ struct InfoPlistContainerView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            Picker("Visualization Mode", selection: $selectedMode) {
-                ForEach(InfoPlistMode.allCases) { mode in
-                    Text(mode.rawValue).tag(mode)
-                }
-            }
-            .pickerStyle(.segmented)
+            SiloSegmented(
+                selection: $selectedMode,
+                options: InfoPlistMode.allCases.map { SiloOption(value: $0, label: $0.rawValue) }
+            )
             .padding()
             #if !os(tvOS)
             .background(Color(.systemGroupedBackground))

@@ -278,7 +278,7 @@ struct CertificatesView: View {
             requestedDate: cert.requestedDate,
             serialNumDecimal: cert.serialNumDecimal
         )
-        let detailVC = UIHostingController(rootView: CertificateDetailView(certificate: cert, portalMetadata: metadata, viewModel: viewModel))
+        let detailVC = SiloHostingController(rootView: CertificateDetailView(certificate: cert, portalMetadata: metadata, viewModel: viewModel))
         #if !os(tvOS)
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
@@ -394,11 +394,11 @@ private struct CreateCertificateSheetView: View {
                         ? "This certificate type requires a paid Apple Developer account."
                         : "Select the certificate type and machine name. This registers the certificate on Apple's servers and saves the private key locally.")
                 ) {
-                    Picker("Certificate Type", selection: $selectedCertificateType) {
-                        ForEach(viewModel.availableCertificateTypes, id: \.rawValue) { certType in
-                            Text(certType.displayName).tag(certType)
-                        }
-                    }
+                    SiloPicker(
+                        title: "Certificate Type",
+                        selection: $selectedCertificateType,
+                        options: viewModel.availableCertificateTypes.map { SiloOption(value: $0, label: $0.displayName) }
+                    )
 
                     TextField("Machine Name", text: $machineName)
                 }

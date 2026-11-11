@@ -130,17 +130,17 @@ final class SettingsViewController: UITableViewController
     @IBOutlet private var accountEmailLabel: UILabel!
     @IBOutlet private var accountTypeLabel: UILabel!
     
-    @IBOutlet private var backgroundRefreshSwitch: UISwitch!
-    @IBOutlet private var noIdleTimeoutSwitch: UISwitch!
-    @IBOutlet private var disableAppLimitSwitch: UISwitch!
-    @IBOutlet private var betaUpdatesSwitch: UISwitch!
-    @IBOutlet private var verboseOperationsLoggingSwitch: UISwitch!
-    @IBOutlet private var altSignVerboseLoggingSwitch: UISwitch!
-    @IBOutlet private var minimuxerVerboseLoggingSwitch: UISwitch!
-    @IBOutlet private var rotateLogsOnStartupSwitch: UISwitch!
+    @IBOutlet private var backgroundRefreshSwitch: SiloSwitch!
+    @IBOutlet private var noIdleTimeoutSwitch: SiloSwitch!
+    @IBOutlet private var disableAppLimitSwitch: SiloSwitch!
+    @IBOutlet private var betaUpdatesSwitch: SiloSwitch!
+    @IBOutlet private var verboseOperationsLoggingSwitch: SiloSwitch!
+    @IBOutlet private var altSignVerboseLoggingSwitch: SiloSwitch!
+    @IBOutlet private var minimuxerVerboseLoggingSwitch: SiloSwitch!
+    @IBOutlet private var rotateLogsOnStartupSwitch: SiloSwitch!
     
 //    @IBOutlet private var refreshSideJITServer: UILabel!
-    @IBOutlet private var disableResponseCachingSwitch: UISwitch!
+    @IBOutlet private var disableResponseCachingSwitch: SiloSwitch!
     
     @IBOutlet private var mastodonButton: UIButton!
     @IBOutlet private var threadsButton: UIButton!
@@ -149,7 +149,7 @@ final class SettingsViewController: UITableViewController
     
     @IBOutlet private var versionLabel: UILabel!
     
-    @IBOutlet private var recreateDatabaseSwitch: UISwitch!
+    @IBOutlet private var recreateDatabaseSwitch: SiloSwitch!
     
     #if !os(tvOS)
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -665,7 +665,7 @@ private extension SettingsViewController
         self.present(alertController, animated: true, completion: nil)
     }
     
-    @IBAction func toggleDisableAppLimit(_ sender: UISwitch) {
+    @IBAction func toggleDisableAppLimit(_ sender: SiloSwitch) {
         if UserDefaults.standard.isCowExploitSupported || !ProcessInfo().sparseRestorePatched {
             // accept state change only when valid
             UserDefaults.standard.isAppLimitDisabled = sender.isOn
@@ -679,31 +679,31 @@ private extension SettingsViewController
         }
     }
     
-    @IBAction func toggleVerboseOperationsLogging(_ sender: UISwitch) {
+    @IBAction func toggleVerboseOperationsLogging(_ sender: SiloSwitch) {
         // update it in database
         UserDefaults.standard.isVerboseOperationsLoggingEnabled = sender.isOn
     }
 
-    @IBAction func toggleAltSignVerboseLogging(_ sender: UISwitch) {
+    @IBAction func toggleAltSignVerboseLogging(_ sender: SiloSwitch) {
         // update it in database
         UserDefaults.standard.isAltSignVerboseLoggingEnabled = sender.isOn
         AltSign.setLogging(sender.isOn)
     }
 
-    @IBAction func toggleMinimuxerVerboseLogging(_ sender: UISwitch) {
+    @IBAction func toggleMinimuxerVerboseLogging(_ sender: SiloSwitch) {
         // update it in database
         UserDefaults.standard.isMinimuxerVerboseLoggingEnabled = sender.isOn
         minimuxerSetLogging(sender.isOn)
     }
 
-    @IBAction func toggleRotateLogsOnStartup(_ sender: UISwitch) {
+    @IBAction func toggleRotateLogsOnStartup(_ sender: SiloSwitch) {
         UserDefaults.standard.isRotateLogsOnStartupEnabled = sender.isOn
         let suffixFormat: SuffixFormat = sender.isOn ? .timestamp : .none
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.consoleLog.updateConfiguration(baseName: "console", suffixFormat: suffixFormat, policy: .immediate)
     }
 
-    @IBAction func toggleRecreateDatabaseSwitch(_ sender: UISwitch) {
+    @IBAction func toggleRecreateDatabaseSwitch(_ sender: SiloSwitch) {
         // Update the setting in UserDefaults
         UserDefaults.standard.recreateDatabaseOnNextStart = sender.isOn
 
@@ -733,24 +733,24 @@ private extension SettingsViewController
     }
 
     
-    @IBAction func toggleEnableBetaUpdates(_ sender: UISwitch) {
+    @IBAction func toggleEnableBetaUpdates(_ sender: SiloSwitch) {
         betaTrackLabel.isEnabled = sender.isOn
         betaTrackPopupButton.isEnabled = sender.isOn
         // update it in database
         UserDefaults.standard.isBetaUpdatesEnabled = sender.isOn
     }
     
-    @IBAction func toggleIsBackgroundRefreshEnabled(_ sender: UISwitch)
+    @IBAction func toggleIsBackgroundRefreshEnabled(_ sender: SiloSwitch)
     {
         UserDefaults.standard.isBackgroundRefreshEnabled = sender.isOn
     }
     
-    @IBAction func toggleNoIdleTimeoutEnabled(_ sender: UISwitch)
+    @IBAction func toggleNoIdleTimeoutEnabled(_ sender: SiloSwitch)
     {
         UserDefaults.standard.isIdleTimeoutDisableEnabled = sender.isOn
     }
     
-    @IBAction func toggleDisableResponseCaching(_ sender: UISwitch)
+    @IBAction func toggleDisableResponseCaching(_ sender: SiloSwitch)
     {
         UserDefaults.standard.responseCachingDisabled = sender.isOn
     }
@@ -1086,7 +1086,7 @@ extension SettingsViewController
             {
             case .healthCheck:
                 let healthCheckView = HealthCheckView()
-                let vc = UIHostingController(rootView: healthCheckView)
+                let vc = SiloHostingController(rootView: healthCheckView)
                 
                 #if !os(tvOS)
                 let appearance = UINavigationBarAppearance()
@@ -1111,11 +1111,11 @@ extension SettingsViewController
                     if let url = url {
                         verboseLog("[SettingsVC] Creating DirectoryExplorerView for: \(url.path)")
                         let view = DirectoryExplorerView(url: url, onSelectFolder: onSelectFolder)
-                        return UIHostingController(rootView: view)
+                        return SiloHostingController(rootView: view)
                     } else {
                         verboseLog("[SettingsVC] Creating root StorageExplorerView")
                         let view = StorageExplorerView(onSelectFolder: onSelectFolder)
-                        return UIHostingController(rootView: view)
+                        return SiloHostingController(rootView: view)
                     }
                 }
                 let vc = makeExplorerVC()
@@ -1194,7 +1194,7 @@ extension SettingsViewController
                 
             case .refreshSideJITServer:
                 let jitConfigView = SideJITServerConfigView()
-                let vc = UIHostingController(rootView: jitConfigView)
+                let vc = SiloHostingController(rootView: jitConfigView)
                 #if !os(tvOS)
                 let appearance = UINavigationBarAppearance()
                 appearance.configureWithDefaultBackground()
@@ -1243,12 +1243,12 @@ extension SettingsViewController
                     }
                 )
                 
-                let vc = UIHostingController(rootView: anisetteServersView)
+                let vc = SiloHostingController(rootView: anisetteServersView)
                 self.prepare(for: UIStoryboardSegue(identifier: "anisetteServers", source: self, destination: vc), sender: nil)
 
             case .connectionConfig:
                 let connectionConfigView = ConnectionConfigView()
-                let vc = UIHostingController(rootView: connectionConfigView)
+                let vc = SiloHostingController(rootView: connectionConfigView)
 
                 #if !os(tvOS)
                 let appearance = UINavigationBarAppearance()
@@ -1261,24 +1261,24 @@ extension SettingsViewController
 
             case .developerServices:
                 let developerServicesView = DeveloperServicesView(presentingViewController: self)
-                let vc = UIHostingController(rootView: developerServicesView)
+                let vc = SiloHostingController(rootView: developerServicesView)
                 self.prepare(for: UIStoryboardSegue(identifier: "developerServices", source: self, destination: vc), sender: nil)
 
             case .certificateManagement:
                 let certificateManagementView = CertificatesView(presentingViewController: self)
-                let vc = UIHostingController(rootView: certificateManagementView)
+                let vc = SiloHostingController(rootView: certificateManagementView)
                 self.prepare(for: UIStoryboardSegue(identifier: "certificateManagement", source: self, destination: vc), sender: nil)
                 
             case .backupAndRestore:
                 let backupView = BackupAndRestoreView()
-                let vc = UIHostingController(rootView: backupView)
+                let vc = SiloHostingController(rootView: backupView)
                 vc.view.backgroundColor = .settingsBackground
                 vc.title = NSLocalizedString("Backup & Restore", comment: "")
                 self.prepare(for: UIStoryboardSegue(identifier: "diagnostics", source: self, destination: vc), sender: nil)
                 
             case .userCustomizations:
                 let userCustomizationsView = UserCustomizationsView()
-                let vc = UIHostingController(rootView: userCustomizationsView)
+                let vc = SiloHostingController(rootView: userCustomizationsView)
                 vc.view.backgroundColor = .settingsBackground
                 vc.title = NSLocalizedString("User Customizations", comment: "")
                 self.prepare(for: UIStoryboardSegue(identifier: "diagnostics", source: self, destination: vc), sender: nil)
@@ -1291,13 +1291,13 @@ extension SettingsViewController
             switch row {
             case .developerOptions:
                 let developerOptionsView = DeveloperOptionsView()
-                let hostingController = UIHostingController(rootView: developerOptionsView)
+                let hostingController = SiloHostingController(rootView: developerOptionsView)
                 hostingController.view.backgroundColor = .settingsBackground
                 hostingController.title = NSLocalizedString("Developer Options", comment: "")
                 self.prepare(for: UIStoryboardSegue(identifier: "diagnostics", source: self, destination: hostingController), sender: nil)
             case .experimentalFeatures:
                 let experimentalFeaturesView = ExperimentalFeaturesView()
-                let hostingController = UIHostingController(rootView: experimentalFeaturesView)
+                let hostingController = SiloHostingController(rootView: experimentalFeaturesView)
                 hostingController.view.backgroundColor = .settingsBackground
                 hostingController.title = NSLocalizedString("Experimental Features", comment: "")
                 self.prepare(for: UIStoryboardSegue(identifier: "diagnostics", source: self, destination: hostingController), sender: nil)

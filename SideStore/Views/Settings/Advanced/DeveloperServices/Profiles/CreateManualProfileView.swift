@@ -71,22 +71,23 @@ struct CreateManualProfileView: View {
                                 .foregroundColor(.secondary)
                         }
                     } else {
-                        Picker("App ID", selection: $selectedAppIDIdentifier) {
-                            ForEach(viewModel.appIDs, id: \.identifier) { appID in
-                                Text(appID.name.isEmpty ? appID.bundleIdentifier : "\(appID.name) (\(appID.bundleIdentifier))")
-                                    .tag(appID.identifier)
+                        SiloPicker(
+                            title: "App ID",
+                            selection: $selectedAppIDIdentifier,
+                            options: viewModel.appIDs.map {
+                                SiloOption(value: $0.identifier, label: $0.name.isEmpty ? $0.bundleIdentifier : "\($0.name) (\($0.bundleIdentifier))")
                             }
-                        }
+                        )
                         .onChange(of: selectedAppIDIdentifier) { _ in
                             updateDefaultProfileName()
                         }
                     }
 
-                    Picker("Profile Type", selection: $selectedProfileType) {
-                        ForEach(availableProfileTypes, id: \.rawValue) { type in
-                            Text(type.displayName).tag(type)
-                        }
-                    }
+                    SiloPicker(
+                        title: "Profile Type",
+                        selection: $selectedProfileType,
+                        options: availableProfileTypes.map { SiloOption(value: $0, label: $0.displayName) }
+                    )
                     .onChange(of: selectedProfileType) { newType in
                         updateDefaultProfileName()
                         if newType.acceptedDeviceTypes == .none {

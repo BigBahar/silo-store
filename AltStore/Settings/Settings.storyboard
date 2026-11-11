@@ -327,12 +327,12 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DPu-zD-Als">
+                                                <control opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="DPu-zD-Als" customClass="SiloSwitch" customModule="SideStore" customModuleProvider="target">
                                                     <rect key="frame" x="311" y="11.666666666666664" width="63" height="28"/>
                                                     <connections>
                                                         <action selector="toggleIsBackgroundRefreshEnabled:" destination="aMk-Xp-UL8" eventType="valueChanged" id="gK5-Wr-8Hh"/>
                                                     </connections>
-                                                </switch>
+                                                </control>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="DPu-zD-Als" firstAttribute="centerY" secondItem="8gV-kx-lGe" secondAttribute="centerY" id="01B-xG-aLo"/>
@@ -362,12 +362,12 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iQA-wm-5ag">
+                                                <control opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="iQA-wm-5ag" customClass="SiloSwitch" customModule="SideStore" customModuleProvider="target">
                                                     <rect key="frame" x="311" y="11.666666666666664" width="63" height="28"/>
                                                     <connections>
                                                         <action selector="toggleNoIdleTimeoutEnabled:" destination="aMk-Xp-UL8" eventType="valueChanged" id="WSl-Jc-g5J"/>
                                                     </connections>
-                                                </switch>
+                                                </control>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="iQA-wm-5ag" secondAttribute="trailing" id="MJ1-HF-Dln"/>
@@ -425,12 +425,12 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1aa-og-ZXD">
+                                                <control opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="1aa-og-ZXD" customClass="SiloSwitch" customModule="SideStore" customModuleProvider="target">
                                                     <rect key="frame" x="311" y="11.666666666666664" width="63" height="28"/>
                                                     <connections>
                                                         <action selector="toggleDisableAppLimit:" destination="aMk-Xp-UL8" eventType="valueChanged" id="zYc-B2-JPg"/>
                                                     </connections>
-                                                </switch>
+                                                </control>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="1aa-og-ZXD" secondAttribute="trailing" id="1Xa-t6-jAC"/>
@@ -818,12 +818,12 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Blb-Dp-9QF">
+                                                <control opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Blb-Dp-9QF" customClass="SiloSwitch" customModule="SideStore" customModuleProvider="target">
                                                     <rect key="frame" x="311" y="11.666666666666664" width="63" height="28"/>
                                                     <connections>
                                                         <action selector="toggleEnableBetaUpdates:" destination="aMk-Xp-UL8" eventType="valueChanged" id="9Ea-BQ-DAE"/>
                                                     </connections>
-                                                </switch>
+                                                </control>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="1B5-BJ-Rkb" firstAttribute="leading" secondItem="G7G-sK-oO3" secondAttribute="leadingMargin" id="9Yc-mg-fVt"/>
@@ -1237,12 +1237,12 @@
                                                     <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="fXy-wl-F5I">
+                                                <control opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="fXy-wl-F5I" customClass="SiloSwitch" customModule="SideStore" customModuleProvider="target">
                                                     <rect key="frame" x="311" y="11.666666666666664" width="63" height="28"/>
                                                     <connections>
                                                         <action selector="toggleEnableAppExtensionsCustomization:" destination="aMk-Xp-UL8" eventType="valueChanged" id="gtQ-5M-9Mt"/>
                                                     </connections>
-                                                </switch>
+                                                </control>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Fq5-2u-Lge" firstAttribute="centerY" secondItem="PRK-Ed-P87" secondAttribute="centerY" id="4dM-eV-6Bi"/>

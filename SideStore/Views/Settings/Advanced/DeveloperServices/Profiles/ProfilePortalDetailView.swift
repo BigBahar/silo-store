@@ -74,12 +74,12 @@ struct ProfilePortalDetailView: View {
 
             Section(header: Text("App ID Association"), footer: Text("Choose from registered team App IDs or specify a custom App ID / identifier.")) {
                 if !viewModel.appIDs.isEmpty {
-                    Picker("Team App ID", selection: $selectedAppIDId) {
-                        Text("Choose App ID").tag("")
-                        ForEach(viewModel.appIDs, id: \.identifier) { appID in
-                            Text("\(appID.name) (\(appID.bundleIdentifier))").tag(appID.identifier)
-                        }
-                    }
+                    SiloPicker(
+                        title: "Team App ID",
+                        selection: $selectedAppIDId,
+                        options: [SiloOption(value: "", label: "Choose App ID")]
+                            + viewModel.appIDs.map { SiloOption(value: $0.identifier, label: "\($0.name) (\($0.bundleIdentifier))") }
+                    )
                 }
 
                 HStack {

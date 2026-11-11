@@ -192,14 +192,18 @@ struct DevicesListView: View {
                             .autocapitalization(.none)
                             .disableAutocorrection(true)
 
-                        Picker("Device Type", selection: $selectedDeviceType) {
-                            Text("iPhone").tag(ALTDeviceType.iphone)
-                            Text("iPad").tag(ALTDeviceType.ipad)
-                            Text("Apple TV").tag(ALTDeviceType.appleTV)
-                            Text("Apple Watch").tag(ALTDeviceType.appleWatch)
-                            Text("Mac").tag(ALTDeviceType.mac)
-                            Text("Vision Pro").tag(ALTDeviceType.visionPro)
-                        }
+                        SiloPicker(
+                            title: "Device Type",
+                            selection: $selectedDeviceType,
+                            options: [
+                                SiloOption(value: ALTDeviceType.iphone, label: "iPhone"),
+                                SiloOption(value: ALTDeviceType.ipad, label: "iPad"),
+                                SiloOption(value: ALTDeviceType.appleTV, label: "Apple TV"),
+                                SiloOption(value: ALTDeviceType.appleWatch, label: "Apple Watch"),
+                                SiloOption(value: ALTDeviceType.mac, label: "Mac"),
+                                SiloOption(value: ALTDeviceType.visionPro, label: "Vision Pro")
+                            ]
+                        )
                     }
 
                     Section {
