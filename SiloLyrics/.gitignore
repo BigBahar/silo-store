@@ -1,0 +1,4 @@
+Config.xcconfig
+SiloLyrics.xcodeproj/
+.build/
+.swiftpm/
