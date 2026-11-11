@@ -6,6 +6,19 @@ name: Silo Store Release
 
 on:
   workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish a release and update the feed (off = just build the IPA as an artifact)
+        type: boolean
+        default: true
+      runner:
+        description: Runner image (switch when GitHub's macOS arm64 pool is full)
+        type: choice
+        default: macos-15-intel
+        options:
+          - macos-15-intel
+          - macos-15
+          - macos-26
 
 concurrency:
   group: silo-release
@@ -16,7 +29,7 @@ permissions:
 
 jobs:
   release:
-    runs-on: macos-15
+    runs-on: ${{ inputs.runner || 'macos-15-intel' }}
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       BUNDLE_ID: com.bigbahar.silostore
@@ -68,6 +81,7 @@ jobs:
           key: silo-build-cache-${{ github.sha }}
 
       - name: Create Release
+        if: ${{ inputs.publish }}
         run: |
           gh release create "$RELEASE_TAG" SideStore.ipa \
             --target "$GITHUB_SHA" \
@@ -76,6 +90,7 @@ jobs:
             --latest
 
       - name: Publish Source Feed
+        if: ${{ inputs.publish }}
         run: |
           REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           rm -rf pages
