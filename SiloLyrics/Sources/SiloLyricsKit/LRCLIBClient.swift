@@ -39,10 +39,11 @@ public struct LRCLIBClient: Sendable {
     }
 
     public func lyrics(for q: TrackQuery) async throws -> LyricsResult? {
-        if let exact = try await get(path: "get", items: [
+        let exact: Record? = try await get(path: "get", items: [
             ("track_name", q.title), ("artist_name", q.artist),
             ("album_name", q.album), ("duration", String(Int(q.duration.rounded()))),
-        ]) {
+        ])
+        if let exact {
             return Self.result(from: exact)
         }
         let found: [Record]? = try await get(path: "search", items: [
