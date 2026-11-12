@@ -56,6 +56,36 @@ enum SiloTunnel
         ConnectionConfig.shared.useLocalVPN = (self.mode == .localDevVPN)
     }
     
+    /// Whether Tailscale is connected right now. Its tunnel is a utun interface holding an
+    /// address in 100.64.0.0/10, which an app can read without any Tailscale API.
+    static func tailscaleIsUp() -> Bool
+    {
+        var list: UnsafeMutablePointer<ifaddrs>?
+        guard getifaddrs(&list) == 0, let first = list else { return false }
+        defer { freeifaddrs(list) }
+
+        for pointer in sequence(first: first, next: { $0.pointee.ifa_next })
+        {
+            let entry = pointer.pointee
+
+            guard let address = entry.ifa_addr,
+                  address.pointee.sa_family == sa_family_t(AF_INET),
+                  (entry.ifa_flags & UInt32(IFF_UP)) != 0,
+                  String(cString: entry.ifa_name).hasPrefix("utun") else { continue }
+
+            let value = address.withMemoryRebound(to: sockaddr_in.self, capacity: 1) {
+                UInt32(bigEndian: $0.pointee.sin_addr.s_addr)
+            }
+
+            if value & 0xFFC0_0000 == 0x6440_0000
+            {
+                return true
+            }
+        }
+
+        return false
+    }
+
     /// Runs a Shortcut and returns to Silo Store when it finishes.
     static func shortcutURL(name: String) -> URL?
     {

@@ -63,6 +63,14 @@ actor LocalDevVPNSession
 
     private func ensureConnected() async
     {
+        // Tailscale already on (the user's own, or left on): use it and never switch it off.
+        // Checked before readiness, which can lag a moment behind a tunnel that is already up.
+        if SiloTunnel.mode == .tailscale, SiloTunnel.tailscaleIsUp()
+        {
+            await self.waitUntilReady()
+            return
+        }
+
         if await Self.isReady() { return }
 
         if self.isEnabling
