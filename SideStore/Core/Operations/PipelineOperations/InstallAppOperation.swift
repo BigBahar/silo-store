@@ -234,8 +234,12 @@ final class InstallAppOperation: BasePipelineOperation<InstallAppOperationContex
                 installedApp.storeApp = storeAppInContext
                 
                 if let contextTrack = self.context.releaseTrack {
-                    // 1. If we downloaded a version with a known release track, overwrite the track record
-                    installedApp.releaseTrack = contextTrack
+                    // 1. If we downloaded a version with a known release track, overwrite the track record.
+                    // The track was read in another context, so bring it into this one first; assigning it
+                    // directly throws "relationship between objects in different contexts" and crashes.
+                    if let trackInContext = backgroundContext.object(with: contextTrack.objectID) as? ReleaseTrack {
+                        installedApp.releaseTrack = trackInContext
+                    }
                 } else if installedApp.releaseTrack == nil {
                     // 2. Backward compatibility: if track was empty, initialize it with the store's active track
                     if let trackEntity = storeAppInContext?.latestSupportedVersion?.releaseTrack {
