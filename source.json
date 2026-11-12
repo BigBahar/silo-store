@@ -82,6 +82,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "1.1.3",
+              "date": "2026-11-12T08:11:08Z",
+              "localizedDescription": "Update banner and background update notification",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/silolyrics-v1.1.3/SiloLyrics.ipa",
+              "size": 240803,
+              "sha256": "caf2b00eced282a571a7beae550317df629714452257721237c84d5d9770dc8e"
+            },
+            {
               "version": "1.1.2",
               "date": "2026-11-12T06:19:07Z",
               "localizedDescription": "Silo Lyrics 1.1.2",
@@ -100,12 +108,12 @@
           ]
         }
       ],
-      "version": "1.1.2",
-      "versionDate": "2026-11-12T06:19:07Z",
-      "versionDescription": "Silo Lyrics 1.1.2",
-      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/silolyrics-v1.1.2/SiloLyrics.ipa",
-      "size": 227810,
-      "sha256": "d9d76bb82d5306e4cfced556ec57dff469ca89752156425445a3693260dbb941"
+      "version": "1.1.3",
+      "versionDate": "2026-11-12T08:11:08Z",
+      "versionDescription": "Update banner and background update notification",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/silolyrics-v1.1.3/SiloLyrics.ipa",
+      "size": 240803,
+      "sha256": "caf2b00eced282a571a7beae550317df629714452257721237c84d5d9770dc8e"
     },
     {
       "name": "Silo Gallery",
