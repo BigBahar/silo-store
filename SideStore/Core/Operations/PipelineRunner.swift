@@ -124,6 +124,9 @@ final class PipelineRunner: Sendable
             }
             
             
+            // Give the LocalDevVPN session back (switches it off again if we switched it on).
+            Task { await LocalDevVPNSession.shared.release() }
+            
             // Re-enable idleTimeout if no more actions are running and end background task
             Task { @MainActor in
                 if UIApplication.shared.isIdleTimerDisabled && !context.isActivelyManagingAnyApp {
@@ -134,6 +137,9 @@ final class PipelineRunner: Sendable
                 }
             }
         }
+        
+        // Bring LocalDevVPN up if it is off (only while the app is on screen), before the readiness check below.
+        await LocalDevVPNSession.shared.acquire()
         
         /* Minimuxer Readiness Check */
         if !CellularRefreshManager.shared.isEnabled,

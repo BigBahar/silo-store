@@ -89,7 +89,8 @@ final class InstalledAppCollectionViewCell: UICollectionViewCell
     func setExpiry(remaining: TimeInterval)
     {
         let week: TimeInterval = 7 * 24 * 60 * 60
-        let fraction = min(max(remaining / week, 0.02), 1)
+        let raw = remaining / week
+        let fraction = raw.isFinite ? min(max(raw, 0.02), 1) : 1
         
         self.expiryFillWidth?.isActive = false
         let width = self.expiryFill.widthAnchor.constraint(equalTo: self.expiryTrack.widthAnchor, multiplier: fraction)

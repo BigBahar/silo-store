@@ -221,6 +221,9 @@ final class SettingsViewController: UITableViewController
     {
         super.viewDidLoad()
         
+        // The storyboard rows are drawn with white text, so this screen stays in the dark look.
+        self.overrideUserInterfaceStyle = .dark
+        
         #if !os(tvOS)
         // --- iOS 26 fix ---
         if #available(iOS 26.0, *) {
@@ -248,6 +251,12 @@ final class SettingsViewController: UITableViewController
         self.versionLabel.attributedText = getVersionAttributedString()
         self.versionLabel.isUserInteractionEnabled = true
         self.versionLabel.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(copyVersionLabelTapped)))
+        
+        #if !os(tvOS)
+        let copyPress = UILongPressGestureRecognizer(target: self, action: #selector(copyVersionLabelLongPressed(_:)))
+        copyPress.minimumPressDuration = 0.5
+        self.versionLabel.addGestureRecognizer(copyPress)
+        #endif
 
         NotificationCenter.default.addObserver(self, selector: #selector(storeUpdateStateDidChange), name: StoreSelfUpdater.didChangeNotification, object: nil)
         StoreSelfUpdater.shared.refreshState()
@@ -386,16 +395,45 @@ private extension SettingsViewController
         }
     }
 
+    /// Tap the update line: install a waiting update, or check for one.
     @objc private func copyVersionLabelTapped() {
         switch StoreSelfUpdater.shared.state
         {
         case .updateAvailable, .failed:
             StoreSelfUpdater.shared.userRequestedUpdate()
-            return
-        case .upToDate, .checking, .connecting, .installing:
+        case .upToDate:
+            self.performUpdateCheck()
+        case .checking, .connecting, .installing:
             break
         }
-
+    }
+    
+    /// Checks the feed now and says what it found.
+    private func performUpdateCheck() {
+        StoreSelfUpdater.shared.checkNow { [weak self] state in
+            guard let self else { return }
+            
+            let message: String?
+            switch state
+            {
+            case .upToDate: message = NSLocalizedString("Silo Store is up to date", comment: "")
+            case .failed(let reason): message = String(format: NSLocalizedString("Couldn't check for updates: %@", comment: ""), reason)
+            default: message = nil
+            }
+            
+            if let message
+            {
+                ToastView(text: message, detailText: nil).show(in: self)
+            }
+        }
+    }
+    
+    @objc private func copyVersionLabelLongPressed(_ recognizer: UILongPressGestureRecognizer) {
+        guard recognizer.state == .began else { return }
+        self.copyVersionToPasteboard()
+    }
+    
+    private func copyVersionToPasteboard() {
         let appVersion = Bundle.Info.activeBundleVersion
         let iosVersion = "iOS \(UIDevice.current.systemVersion) (\(ProcessInfo.processInfo.operatingSystemBuild))"
         let fullText = "\(appVersion)\n\(iosVersion)"

@@ -10,7 +10,7 @@ import UIKit
 ///
 /// The update check is the normal source fetch (on launch and in the background) and
 /// needs no VPN. When it finds a newer version the app asks first. On "Update now" it
-/// switches LocalDevVPN on, installs, and switches LocalDevVPN off again.
+/// installs like any other app; the LocalDevVPN switching is done by LocalDevVPNSession.
 final class StoreSelfUpdater
 {
     static let shared = StoreSelfUpdater()
@@ -27,41 +27,23 @@ final class StoreSelfUpdater
     }
 
     private static let askBeforeUpdatingKey = "siloAutoInstallStoreUpdates"
-    private static let vpnEnabledByUpdaterKey = "siloVPNEnabledByUpdater"
-
-    /// The scheme LocalDevVPN opens to bring us back after it switches the VPN.
-    private static let callbackScheme = "silostore"
-    private static let vpnReadyTimeout = 30
-    private static let vpnOffDelayAfterLaunch: TimeInterval = 8
 
     private(set) var state: State = .upToDate
     private var isBusy = false
-    private var waitingForVPN = false
     private var lastPromptedVersion: String?
-    private var becomeActiveObserver: NSObjectProtocol?
 
-    private init()
-    {
-        self.becomeActiveObserver = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification, object: nil, queue: .main) { [weak self] _ in
-            self?.appDidBecomeActive()
-        }
-    }
+    private init() {}
 
     /// Whether the app asks before updating. Defaults to on.
     var askBeforeUpdating: Bool {
         return UserDefaults.standard.object(forKey: Self.askBeforeUpdatingKey) as? Bool ?? true
     }
 
-    private var vpnEnabledByUpdater: Bool {
-        get { UserDefaults.standard.bool(forKey: Self.vpnEnabledByUpdaterKey) }
-        set { UserDefaults.standard.set(newValue, forKey: Self.vpnEnabledByUpdaterKey) }
-    }
-
     var statusText: String {
         switch self.state
         {
         case .upToDate:
-            return NSLocalizedString("Up to date", comment: "")
+            return NSLocalizedString("Up to date. Tap to check", comment: "")
         case .checking:
             return NSLocalizedString("Checking for updates…", comment: "")
         case .updateAvailable(let version):
@@ -99,41 +81,37 @@ final class StoreSelfUpdater
             completion(self.state)
             return
         }
-        
+
         self.isBusy = true
         self.setState(.checking)
-        
+
         AppManager.shared.updateAllSources { result in
             DispatchQueue.main.async {
                 self.isBusy = false
-                
+
                 switch result
                 {
                 case .failure(let error):
                     self.setState(.failed(message: error.localizedDescription))
                 case .success:
                     self.refreshState()
-                    
+
                     if case .updateAvailable(let version) = self.state
                     {
                         self.lastPromptedVersion = nil
                         self.promptForUpdate(version: version)
                     }
                 }
-                
+
                 completion(self.state)
             }
         }
     }
-    
+
     /// Call once the app has finished launching.
     func appDidLaunch()
     {
-        // The VPN was switched on for an update that has since restarted the app.
-        guard self.vpnEnabledByUpdater, !self.isBusy else { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.vpnOffDelayAfterLaunch) {
-            self.switchVPNOffIfEnabledByUpdater()
-        }
+        LocalDevVPNSession.shared.appDidLaunch()
     }
 
     func refreshState()
@@ -160,7 +138,7 @@ final class StoreSelfUpdater
     {
         guard self.lastPromptedVersion != version,
               UIApplication.shared.applicationState == .active,
-              let presenter = self.topViewController() else { return }
+              let presenter = UIViewController.siloTopMost() else { return }
 
         self.lastPromptedVersion = version
 
@@ -185,142 +163,38 @@ final class StoreSelfUpdater
         {
             self.refreshState()
         }
-        
+
         self.beginUpdate()
     }
-    
-    /// Starts the update: straight away if the VPN is already up, otherwise via LocalDevVPN.
+
     func beginUpdate()
     {
         guard !self.isBusy else { return }
         guard case .updateAvailable(let version) = self.state else { return }
 
-        self.isBusy = true
-
-        Task {
-            let result = await isMinimuxerReady()
-
-            DispatchQueue.main.async {
-                if case .success(let ready) = result, ready
-                {
-                    self.installNow(version: version)
-                }
-                else
-                {
-                    self.switchVPNOn(version: version)
-                }
-            }
-        }
-    }
-
-    private func switchVPNOn(version: String)
-    {
-        self.setState(.connecting(version: version))
-        self.vpnEnabledByUpdater = true
-        self.waitingForVPN = true
-
-        self.openLocalDevVPN(action: "enable") { success in
-            guard !success else { return }
-            self.waitingForVPN = false
-            self.vpnEnabledByUpdater = false
-            self.finish(failure: NSLocalizedString("LocalDevVPN could not be opened", comment: ""))
-        }
-    }
-
-    /// LocalDevVPN has opened us again; wait for the tunnel to come up, then install.
-    private func appDidBecomeActive()
-    {
-        guard self.waitingForVPN, case .connecting(let version) = self.state else { return }
-        self.waitingForVPN = false
-
-        Task {
-            for _ in 0 ..< Self.vpnReadyTimeout
-            {
-                if case .success(let ready) = await isMinimuxerReady(), ready
-                {
-                    DispatchQueue.main.async { self.installNow(version: version) }
-                    return
-                }
-
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-            }
-
-            DispatchQueue.main.async {
-                self.finish(failure: NSLocalizedString("LocalDevVPN did not connect", comment: ""))
-                self.switchVPNOffIfEnabledByUpdater()
-            }
-        }
-    }
-
-    private func installNow(version: String)
-    {
         let context = DatabaseManager.shared.viewContext
 
         guard let installedApp = InstalledApp.fetchAltStore(in: context), installedApp.hasUpdate else {
-            self.isBusy = false
             self.refreshState()
-            self.switchVPNOffIfEnabledByUpdater()
             return
         }
 
+        self.isBusy = true
         self.setState(.installing(version: version))
 
-        AppManager.shared.update(installedApp, presentingViewController: self.topViewController()) { result in
+        AppManager.shared.update(installedApp, presentingViewController: UIViewController.siloTopMost()) { result in
             DispatchQueue.main.async {
+                self.isBusy = false
+
                 switch result
                 {
                 case .success:
-                    self.isBusy = false
                     self.refreshState()
                 case .failure(let error):
-                    self.finish(failure: error.localizedDescription)
+                    self.setState(.failed(message: error.localizedDescription))
                 }
-
-                self.switchVPNOffIfEnabledByUpdater()
             }
         }
-    }
-
-    private func finish(failure message: String)
-    {
-        self.isBusy = false
-        self.setState(.failed(message: message))
-    }
-
-    // MARK: LocalDevVPN
-
-    private func switchVPNOffIfEnabledByUpdater()
-    {
-        guard self.vpnEnabledByUpdater else { return }
-        self.vpnEnabledByUpdater = false
-        self.openLocalDevVPN(action: "disable", completion: nil)
-    }
-
-    private func openLocalDevVPN(action: String, completion: ((Bool) -> Void)?)
-    {
-        guard let url = URL(string: "localdevvpn://\(action)?scheme=\(Self.callbackScheme)") else {
-            completion?(false)
-            return
-        }
-
-        UIApplication.shared.open(url, options: [:]) { success in
-            DispatchQueue.main.async { completion?(success) }
-        }
-    }
-
-    // MARK: Helpers
-
-    private func topViewController() -> UIViewController?
-    {
-        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
-        let scene = scenes.first(where: { $0.activationState == .foregroundActive }) ?? scenes.first
-
-        var top = scene?.windows.first(where: { $0.isKeyWindow })?.rootViewController
-        while let presented = top?.presentedViewController
-        {
-            top = presented
-        }
-        return top
     }
 
     private func setState(_ state: State)

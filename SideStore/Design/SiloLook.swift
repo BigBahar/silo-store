@@ -42,7 +42,7 @@ extension SiloLook {
         text: UIColor(siloHex: 0xF4F4F5),
         textMuted: UIColor(siloHex: 0xB8B8BE),
         textFaint: UIColor(siloHex: 0x8E8E95),
-        accent: UIColor(siloHex: 0x4FF0FF),
+        accent: UIColor(siloHex: 0x22B9CC),
         accentInk: UIColor(siloHex: 0x0A0A0B),
         accentMuted: UIColor(siloHex: 0x17363B),
         danger: UIColor(siloHex: 0xFF9A90),

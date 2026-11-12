@@ -46,6 +46,7 @@ IOS_DARK = {
     "text": "#F4F4F5",
     "textMuted": "#B8B8BE",
     "textFaint": "#8E8E95",
+    "primary": "#22B9CC",
     "primaryInk": "#0A0A0B",
     "accentMuted": "#17363B",
 }

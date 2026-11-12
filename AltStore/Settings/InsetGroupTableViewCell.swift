@@ -49,10 +49,11 @@ final class InsetGroupTableViewCell: UITableViewCell
         self.insetView.layer.masksToBounds = true
         self.insetView.layer.cornerRadius = 0
 
-        self.textLabel?.font = SiloFont.uiFont(.body)
-        self.textLabel?.textColor = SiloColor.text
-        self.detailTextLabel?.font = SiloFont.uiFont(.label)
-        self.detailTextLabel?.textColor = SiloColor.textMuted
+        // The rows draw their own labels (set in the storyboard): put them in Rubik.
+        for case let label as UILabel in self.contentView.subviews
+        {
+            label.font = SiloFont.uiFont(size: label.font.pointSize, weight: 500, style: .body)
+        }
         
         // Get the preferred background color from Interface Builder.
         self.insetView.backgroundColor = self.backgroundColor
