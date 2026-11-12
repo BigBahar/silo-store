@@ -16,26 +16,6 @@
       "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
       "tintColor": "#7B3FE4",
       "releaseChannels": []
-    },
-    {
-      "name": "Silo Gallery",
-      "bundleIdentifier": "com.silolabs.gallery",
-      "developerName": "Uri",
-      "subtitle": "Your photos, in your own Silo",
-      "localizedDescription": "Backs up the photos and videos on this iPhone to your own Silo, and shows your whole Gallery: timeline, albums and a full-screen viewer.",
-      "iconURL": "https://cloud.urisgame.com/downloads/silo-gallery-icon.png",
-      "tintColor": "#22B9CC",
-      "releaseChannels": []
-    },
-    {
-      "name": "Silo Drive",
-      "bundleIdentifier": "com.silolabs.drive",
-      "developerName": "Uri",
-      "subtitle": "Your files, in your own Silo",
-      "localizedDescription": "Shows your Silo Drive: open, upload, share, rename and delete files, and back up the folders you pick in Files.",
-      "iconURL": "https://cloud.urisgame.com/downloads/silo-drive-icon.png",
-      "tintColor": "#22B9CC",
-      "releaseChannels": []
     }
   ],
   "news": []
