@@ -16,6 +16,16 @@
       "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
       "tintColor": "#22B9CC",
       "releaseChannels": []
+    },
+    {
+      "name": "Silo Lyrics",
+      "bundleIdentifier": "com.bigbahar.silolyrics",
+      "developerName": "Uri",
+      "subtitle": "Synced Spotify lyrics in the Dynamic Island",
+      "localizedDescription": "Shows time-synced lyrics for what you're playing on Spotify, on a full-screen lyrics view and as a Live Activity in the Dynamic Island and on the Lock Screen.",
+      "iconURL": "https://bigbahar.github.io/silo-store/icon.png",
+      "tintColor": "#22B9CC",
+      "releaseChannels": []
     }
   ],
   "news": []
