@@ -106,6 +106,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "1.1.7",
+              "date": "2026-11-12T21:48:30Z",
+              "localizedDescription": "Fixes lyrics cropped on the left",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/silolyrics-v1.1.7/SiloLyrics.ipa",
+              "size": 257702,
+              "sha256": "990af075cff18c68e7d6c9cf9aaac3809a797e7fa401d55dce45443cd2643bb0"
+            },
+            {
               "version": "1.1.5",
               "date": "2026-11-12T21:19:29Z",
               "localizedDescription": "Island only while Spotify plays; animated lyrics",
@@ -148,12 +156,12 @@
           ]
         }
       ],
-      "version": "1.1.5",
-      "versionDate": "2026-11-12T21:19:29Z",
-      "versionDescription": "Island only while Spotify plays; animated lyrics",
-      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/silolyrics-v1.1.5/SiloLyrics.ipa",
-      "size": 257972,
-      "sha256": "f2d56f33119f7da0e806a8cc0b45ba27980c7cbb4f264fce9458a329b134954b"
+      "version": "1.1.7",
+      "versionDate": "2026-11-12T21:48:30Z",
+      "versionDescription": "Fixes lyrics cropped on the left",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/silolyrics-v1.1.7/SiloLyrics.ipa",
+      "size": 257702,
+      "sha256": "990af075cff18c68e7d6c9cf9aaac3809a797e7fa401d55dce45443cd2643bb0"
     },
     {
       "name": "Silo Gallery",
