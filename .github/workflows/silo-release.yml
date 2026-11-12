@@ -72,6 +72,18 @@ jobs:
       - name: Build
         run: python3 scripts/ci/workflow.py build
 
+      - name: Remove app extensions
+        # Each extension (widget, backup helper) takes a free-account App ID and an active-app slot.
+        run: |
+          rm -rf ipa-strip && mkdir ipa-strip
+          unzip -q SideStore.ipa -d ipa-strip
+          rm -rf ipa-strip/Payload/*.app/PlugIns
+          rm SideStore.ipa
+          (cd ipa-strip && zip -qry ../SideStore.ipa Payload)
+          rm -rf ipa-strip
+          unzip -l SideStore.ipa | tail -1
+          if unzip -l SideStore.ipa | grep -q "\.appex"; then echo "extensions still present" >&2; exit 1; fi
+
       - name: Save Cache
         uses: actions/cache/save@v3
         with:

@@ -5,7 +5,8 @@
 
 import UIKit
 
-/// Switches LocalDevVPN on for the length of an install, update or refresh, and off again.
+/// Switches the tunnel (LocalDevVPN, or Tailscale through Shortcuts) on for the length of an
+/// install, update or refresh, and off again.
 ///
 /// Every app operation goes through `PipelineRunner.perform`, which takes a session
 /// before it starts and gives it back when it ends. If the tunnel is already up (the
@@ -126,7 +127,16 @@ actor LocalDevVPNSession
     @MainActor
     private static func open(action: String) async -> Bool
     {
-        guard let url = URL(string: "localdevvpn://\(action)?scheme=\(callbackScheme)") else { return false }
+        let url: URL?
+        switch SiloTunnel.mode
+        {
+        case .localDevVPN:
+            url = URL(string: "localdevvpn://\(action)?scheme=\(callbackScheme)")
+        case .tailscale:
+            url = SiloTunnel.shortcutURL(name: action == "enable" ? SiloTunnel.onShortcutName : SiloTunnel.offShortcutName)
+        }
+        
+        guard let url else { return false }
 
         return await withCheckedContinuation { continuation in
             UIApplication.shared.open(url, options: [:]) { success in

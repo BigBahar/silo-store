@@ -144,7 +144,7 @@ final class StoreSelfUpdater
 
         let alert = UIAlertController(
             title: NSLocalizedString("Update Silo Store", comment: ""),
-            message: String(format: NSLocalizedString("Version %@ is ready. Silo Store will turn LocalDevVPN on for the update and off again afterwards.", comment: ""), version),
+            message: String(format: NSLocalizedString("Version %@ is ready. Silo Store will turn %@ on for the update and off again afterwards.", comment: ""), version, SiloTunnel.displayName),
             preferredStyle: .alert
         )
         alert.addAction(UIAlertAction(title: NSLocalizedString("Later", comment: ""), style: .cancel))

@@ -15,6 +15,10 @@ private extension Color {
 }
 
 struct UserCustomizationsView: View {
+    @State private var tunnelMode: SiloTunnel.Mode = SiloTunnel.mode
+    @State private var relayAddress: String = ConnectionConfig.shared.remoteServerIp
+    @State private var tunnelOnShortcut: String = SiloTunnel.onShortcutName
+    @State private var tunnelOffShortcut: String = SiloTunnel.offShortcutName
     @State private var selectedBackend: GatewayBackend = selectedGatewayBackendCache
     @State private var useOnDeviceAnisette: Bool = UserDefaults.standard.useOnDeviceAnisette
     @State private var showAnisetteRestartConfirmation: Bool = false
@@ -73,6 +77,45 @@ struct UserCustomizationsView: View {
                     }
                     .background(Color.settingsRowBackground)
                     .cornerRadius(14)
+                }
+
+                // Tunnel: which VPN the app switches on while it installs and refreshes
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("TUNNEL")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(Color.white.opacity(0.6))
+                        .padding(.horizontal, 16)
+                    
+                    VStack(alignment: .leading, spacing: 0) {
+                        SiloSegmented(
+                            selection: $tunnelMode,
+                            options: [
+                                SiloOption(value: SiloTunnel.Mode.localDevVPN, label: "LocalDevVPN"),
+                                SiloOption(value: SiloTunnel.Mode.tailscale, label: "Tailscale")
+                            ]
+                        )
+                        .padding(12)
+                        
+                        if tunnelMode == .tailscale {
+                            divider
+                            tunnelField(title: "Relay address", placeholder: "100.x.y.z", text: $relayAddress)
+                            divider
+                            tunnelField(title: "Shortcut to connect", placeholder: SiloTunnel.defaultOnShortcut, text: $tunnelOnShortcut)
+                            divider
+                            tunnelField(title: "Shortcut to disconnect", placeholder: SiloTunnel.defaultOffShortcut, text: $tunnelOffShortcut)
+                            divider
+                            Text("Make two Shortcuts: one with Tailscale's Connect action, one with Disconnect. Silo Store runs them around installs and refreshes. The relay address is the Tailscale address of your relay.")
+                                .font(.system(size: 12))
+                                .foregroundColor(Color.white.opacity(0.6))
+                                .padding(16)
+                        }
+                    }
+                    .background(Color.settingsRowBackground)
+                    .cornerRadius(14)
+                    .onChange(of: tunnelMode) { mode in SiloTunnel.mode = mode }
+                    .onChange(of: relayAddress) { value in ConnectionConfig.shared.remoteServerIp = value.trimmingCharacters(in: .whitespaces) }
+                    .onChange(of: tunnelOnShortcut) { value in SiloTunnel.onShortcutName = value }
+                    .onChange(of: tunnelOffShortcut) { value in SiloTunnel.offShortcutName = value }
                 }
 
                 // Section 1: ANISETTE
@@ -506,6 +549,22 @@ struct UserCustomizationsView: View {
         .frame(minHeight: 50)
     }
 
+    private func tunnelField(title: String, placeholder: String, text: Binding<String>) -> some View {
+        HStack(spacing: 12) {
+            Text(title)
+                .font(.system(size: 17, weight: .bold))
+                .foregroundColor(.white)
+            Spacer(minLength: 8)
+            TextField(placeholder, text: text)
+                .multilineTextAlignment(.trailing)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .foregroundColor(Color.white.opacity(0.8))
+        }
+        .padding(.horizontal, 16)
+        .frame(minHeight: 50)
+    }
+    
     private var divider: some View {
         Rectangle()
             .fill(Color.settingsDivider)
