@@ -20,6 +20,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "0.7.0-20261112.20+8809190b",
+              "date": "2026-11-12T22:16:07Z",
+              "localizedDescription": "Leaves Tailscale on when it was already on",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261112.20/SideStore.ipa",
+              "size": 25516052,
+              "sha256": "581bb3dc18a115bf4427113ef65437777d9be3d9997d5adea0638d19c591bae9"
+            },
+            {
               "version": "0.7.0-20261112.19+f5735171",
               "date": "2026-11-12T21:33:23Z",
               "localizedDescription": "Tailscale tunnel mode, no app extensions, Silo Lyrics install fix",
@@ -86,12 +94,12 @@
           ]
         }
       ],
-      "version": "0.7.0-20261112.19+f5735171",
-      "versionDate": "2026-11-12T21:33:23Z",
-      "versionDescription": "Tailscale tunnel mode, no app extensions, Silo Lyrics install fix",
-      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261112.19/SideStore.ipa",
-      "size": 25515631,
-      "sha256": "dffdea252a398cebc94b6eedaa76c3f89948acfadc2c7f5432ef7d0c8532a258"
+      "version": "0.7.0-20261112.20+8809190b",
+      "versionDate": "2026-11-12T22:16:07Z",
+      "versionDescription": "Leaves Tailscale on when it was already on",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/v0.7.0-20261112.20/SideStore.ipa",
+      "size": 25516052,
+      "sha256": "581bb3dc18a115bf4427113ef65437777d9be3d9997d5adea0638d19c591bae9"
     },
     {
       "name": "Silo Lyrics",
