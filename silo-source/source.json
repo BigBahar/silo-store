@@ -46,6 +46,16 @@
       "iconURL": "https://cloud.urisgame.com/downloads/silo-drive-icon.png",
       "tintColor": "#22B9CC",
       "releaseChannels": []
+    },
+    {
+      "name": "Genhex Cloud",
+      "bundleIdentifier": "com.silolabs.cloud",
+      "developerName": "Uri",
+      "subtitle": "Your photos and files",
+      "localizedDescription": "Browse your Genhex Cloud photos, albums and Drive files on your iPhone.",
+      "iconURL": "https://cloud.urisgame.com/downloads/genhex-cloud-icon.png",
+      "tintColor": "#22B9CC",
+      "releaseChannels": []
     }
   ],
   "news": []
