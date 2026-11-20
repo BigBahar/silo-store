@@ -230,6 +230,36 @@
       "downloadURL": "https://cloud.urisgame.com/downloads/silo-drive.ipa",
       "size": 777837,
       "sha256": "f4a8953c2f9423e4b1bbac24b5178e1dac406ab62dfc46a72b254e8a76dbcba3"
+    },
+    {
+      "name": "Genhex Cloud",
+      "bundleIdentifier": "com.silolabs.cloud",
+      "developerName": "Uri",
+      "subtitle": "Your photos and files",
+      "localizedDescription": "Browse your Genhex Cloud photos, albums and Drive files on your iPhone.",
+      "iconURL": "https://cloud.urisgame.com/downloads/genhex-cloud-icon.png",
+      "tintColor": "#22B9CC",
+      "releaseChannels": [
+        {
+          "track": "stable",
+          "releases": [
+            {
+              "version": "1.8",
+              "date": "2026-11-20T19:56:35Z",
+              "localizedDescription": "Genhex Cloud 1.8",
+              "downloadURL": "https://cloud.urisgame.com/downloads/genhex-cloud.ipa",
+              "size": 814492,
+              "sha256": "a4593bd36a752a86d47a59018d8b30612fdf5cafeda4ab63ecdfba28c9e89343"
+            }
+          ]
+        }
+      ],
+      "version": "1.8",
+      "versionDate": "2026-11-20T19:56:35Z",
+      "versionDescription": "Genhex Cloud 1.8",
+      "downloadURL": "https://cloud.urisgame.com/downloads/genhex-cloud.ipa",
+      "size": 814492,
+      "sha256": "a4593bd36a752a86d47a59018d8b30612fdf5cafeda4ab63ecdfba28c9e89343"
     }
   ],
   "news": []
