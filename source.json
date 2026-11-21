@@ -184,6 +184,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "1.11",
+              "date": "2026-11-21T14:19:09Z",
+              "localizedDescription": "Genhex Gallery 1.11",
+              "downloadURL": "https://cloud.urisgame.com/downloads/silo-gallery.ipa",
+              "size": 823574,
+              "sha256": "05f2b9a5477efc48fedd859e6ddf79f82585ff31cd1b6fdf714b0cd6fd2645e8"
+            },
+            {
               "version": "1.9",
               "date": "2026-11-21T08:16:25Z",
               "localizedDescription": "Silo Gallery 1.9",
@@ -202,12 +210,12 @@
           ]
         }
       ],
-      "version": "1.9",
-      "versionDate": "2026-11-21T08:16:25Z",
-      "versionDescription": "Silo Gallery 1.9",
+      "version": "1.11",
+      "versionDate": "2026-11-21T14:19:09Z",
+      "versionDescription": "Genhex Gallery 1.11",
       "downloadURL": "https://cloud.urisgame.com/downloads/silo-gallery.ipa",
-      "size": 823523,
-      "sha256": "2d475d4c00b0c83225ae6a8b99ab03b1b10c184cc0efae8cc8aeb4750b163b08"
+      "size": 823574,
+      "sha256": "05f2b9a5477efc48fedd859e6ddf79f82585ff31cd1b6fdf714b0cd6fd2645e8"
     },
     {
       "name": "Silo Drive",
@@ -221,6 +229,14 @@
         {
           "track": "stable",
           "releases": [
+            {
+              "version": "1.11",
+              "date": "2026-11-21T14:19:09Z",
+              "localizedDescription": "Genhex Drive 1.11",
+              "downloadURL": "https://cloud.urisgame.com/downloads/silo-drive.ipa",
+              "size": 823291,
+              "sha256": "c6f84e80c866cc579e6a2c5a216edb1ff89e84786ec01947ea662dbb49f5a3f2"
+            },
             {
               "version": "1.9",
               "date": "2026-11-21T08:16:25Z",
@@ -240,12 +256,12 @@
           ]
         }
       ],
-      "version": "1.9",
-      "versionDate": "2026-11-21T08:16:25Z",
-      "versionDescription": "Silo Drive 1.9",
+      "version": "1.11",
+      "versionDate": "2026-11-21T14:19:09Z",
+      "versionDescription": "Genhex Drive 1.11",
       "downloadURL": "https://cloud.urisgame.com/downloads/silo-drive.ipa",
-      "size": 823186,
-      "sha256": "6bc6cb534c716288d35d4a742d0f97bd38db717d58d1e98466bf9cc7a605e565"
+      "size": 823291,
+      "sha256": "c6f84e80c866cc579e6a2c5a216edb1ff89e84786ec01947ea662dbb49f5a3f2"
     },
     {
       "name": "Genhex Cloud",
@@ -259,6 +275,14 @@
         {
           "track": "stable",
           "releases": [
+            {
+              "version": "1.11",
+              "date": "2026-11-21T14:19:09Z",
+              "localizedDescription": "Genhex Cloud 1.11",
+              "downloadURL": "https://cloud.urisgame.com/downloads/genhex-cloud.ipa",
+              "size": 823410,
+              "sha256": "20acbdc30f674e7a4eb6146b9e32d972710fd3a2646c862112aadd449d87e677"
+            },
             {
               "version": "1.9",
               "date": "2026-11-21T08:16:25Z",
@@ -278,12 +302,12 @@
           ]
         }
       ],
-      "version": "1.9",
-      "versionDate": "2026-11-21T08:16:25Z",
-      "versionDescription": "Genhex Cloud 1.9",
+      "version": "1.11",
+      "versionDate": "2026-11-21T14:19:09Z",
+      "versionDescription": "Genhex Cloud 1.11",
       "downloadURL": "https://cloud.urisgame.com/downloads/genhex-cloud.ipa",
-      "size": 823340,
-      "sha256": "c29d05dda114f9409428538320ad453177c7f725ef4fe9d852892e521b5ca574"
+      "size": 823410,
+      "sha256": "20acbdc30f674e7a4eb6146b9e32d972710fd3a2646c862112aadd449d87e677"
     }
   ],
   "news": []
