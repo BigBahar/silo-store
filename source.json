@@ -185,7 +185,7 @@
           "releases": [
             {
               "version": "1.9",
-              "date": "2026-11-21T08:16:06Z",
+              "date": "2026-11-21T08:16:25Z",
               "localizedDescription": "Silo Gallery 1.9",
               "downloadURL": "https://cloud.urisgame.com/downloads/silo-gallery.ipa",
               "size": 823523,
@@ -203,7 +203,7 @@
         }
       ],
       "version": "1.9",
-      "versionDate": "2026-11-21T08:16:06Z",
+      "versionDate": "2026-11-21T08:16:25Z",
       "versionDescription": "Silo Gallery 1.9",
       "downloadURL": "https://cloud.urisgame.com/downloads/silo-gallery.ipa",
       "size": 823523,
@@ -223,7 +223,7 @@
           "releases": [
             {
               "version": "1.9",
-              "date": "2026-11-21T08:16:06Z",
+              "date": "2026-11-21T08:16:25Z",
               "localizedDescription": "Silo Drive 1.9",
               "downloadURL": "https://cloud.urisgame.com/downloads/silo-drive.ipa",
               "size": 823186,
@@ -241,7 +241,7 @@
         }
       ],
       "version": "1.9",
-      "versionDate": "2026-11-21T08:16:06Z",
+      "versionDate": "2026-11-21T08:16:25Z",
       "versionDescription": "Silo Drive 1.9",
       "downloadURL": "https://cloud.urisgame.com/downloads/silo-drive.ipa",
       "size": 823186,
@@ -260,6 +260,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "1.9",
+              "date": "2026-11-21T08:16:25Z",
+              "localizedDescription": "Genhex Cloud 1.9",
+              "downloadURL": "https://cloud.urisgame.com/downloads/genhex-cloud.ipa",
+              "size": 823340,
+              "sha256": "c29d05dda114f9409428538320ad453177c7f725ef4fe9d852892e521b5ca574"
+            },
+            {
               "version": "1.8",
               "date": "2026-11-20T19:56:35Z",
               "localizedDescription": "Genhex Cloud 1.8",
@@ -270,12 +278,12 @@
           ]
         }
       ],
-      "version": "1.8",
-      "versionDate": "2026-11-20T19:56:35Z",
-      "versionDescription": "Genhex Cloud 1.8",
+      "version": "1.9",
+      "versionDate": "2026-11-21T08:16:25Z",
+      "versionDescription": "Genhex Cloud 1.9",
       "downloadURL": "https://cloud.urisgame.com/downloads/genhex-cloud.ipa",
-      "size": 814492,
-      "sha256": "a4593bd36a752a86d47a59018d8b30612fdf5cafeda4ab63ecdfba28c9e89343"
+      "size": 823340,
+      "sha256": "c29d05dda114f9409428538320ad453177c7f725ef4fe9d852892e521b5ca574"
     }
   ],
   "news": []
