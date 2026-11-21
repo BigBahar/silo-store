@@ -184,6 +184,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "1.9",
+              "date": "2026-11-21T08:16:06Z",
+              "localizedDescription": "Silo Gallery 1.9",
+              "downloadURL": "https://cloud.urisgame.com/downloads/silo-gallery.ipa",
+              "size": 823523,
+              "sha256": "2d475d4c00b0c83225ae6a8b99ab03b1b10c184cc0efae8cc8aeb4750b163b08"
+            },
+            {
               "version": "1.5",
               "date": "2026-11-12T07:50:39Z",
               "localizedDescription": "Silo Gallery 1.5",
@@ -194,12 +202,12 @@
           ]
         }
       ],
-      "version": "1.5",
-      "versionDate": "2026-11-12T07:50:39Z",
-      "versionDescription": "Silo Gallery 1.5",
+      "version": "1.9",
+      "versionDate": "2026-11-21T08:16:06Z",
+      "versionDescription": "Silo Gallery 1.9",
       "downloadURL": "https://cloud.urisgame.com/downloads/silo-gallery.ipa",
-      "size": 778167,
-      "sha256": "b4852cfd7ab89cd7dd56763f5154fa34bb73ed90fc96a55614a67693ba76f6ed"
+      "size": 823523,
+      "sha256": "2d475d4c00b0c83225ae6a8b99ab03b1b10c184cc0efae8cc8aeb4750b163b08"
     },
     {
       "name": "Silo Drive",
@@ -214,6 +222,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "1.9",
+              "date": "2026-11-21T08:16:06Z",
+              "localizedDescription": "Silo Drive 1.9",
+              "downloadURL": "https://cloud.urisgame.com/downloads/silo-drive.ipa",
+              "size": 823186,
+              "sha256": "6bc6cb534c716288d35d4a742d0f97bd38db717d58d1e98466bf9cc7a605e565"
+            },
+            {
               "version": "1.5",
               "date": "2026-11-12T07:50:39Z",
               "localizedDescription": "Silo Drive 1.5",
@@ -224,12 +240,12 @@
           ]
         }
       ],
-      "version": "1.5",
-      "versionDate": "2026-11-12T07:50:39Z",
-      "versionDescription": "Silo Drive 1.5",
+      "version": "1.9",
+      "versionDate": "2026-11-21T08:16:06Z",
+      "versionDescription": "Silo Drive 1.9",
       "downloadURL": "https://cloud.urisgame.com/downloads/silo-drive.ipa",
-      "size": 777837,
-      "sha256": "f4a8953c2f9423e4b1bbac24b5178e1dac406ab62dfc46a72b254e8a76dbcba3"
+      "size": 823186,
+      "sha256": "6bc6cb534c716288d35d4a742d0f97bd38db717d58d1e98466bf9cc7a605e565"
     },
     {
       "name": "Genhex Cloud",
