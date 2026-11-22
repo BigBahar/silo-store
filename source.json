@@ -308,6 +308,36 @@
       "downloadURL": "https://cloud.urisgame.com/downloads/genhex-cloud.ipa",
       "size": 823410,
       "sha256": "20acbdc30f674e7a4eb6146b9e32d972710fd3a2646c862112aadd449d87e677"
+    },
+    {
+      "name": "Claudex",
+      "bundleIdentifier": "com.silolabs.claudex",
+      "developerName": "Uri",
+      "subtitle": "Remote control for Claudex on your PC",
+      "localizedDescription": "Follow and steer your Claudex sessions from your iPhone.",
+      "iconURL": "https://bigbahar.github.io/silo-store/claudex-icon.png",
+      "tintColor": "#E2621B",
+      "releaseChannels": [
+        {
+          "track": "stable",
+          "releases": [
+            {
+              "version": "1.1",
+              "date": "2026-11-22T18:29:40Z",
+              "localizedDescription": "Claudex Remote 1.1",
+              "downloadURL": "https://bigbahar.github.io/silo-store/claudex-remote.ipa",
+              "size": 548902,
+              "sha256": "116c303e4486007ffe4e3de02b4a13d3d30d1449e0e55b66d526298207c25238"
+            }
+          ]
+        }
+      ],
+      "version": "1.1",
+      "versionDate": "2026-11-22T18:29:40Z",
+      "versionDescription": "Claudex Remote 1.1",
+      "downloadURL": "https://bigbahar.github.io/silo-store/claudex-remote.ipa",
+      "size": 548902,
+      "sha256": "116c303e4486007ffe4e3de02b4a13d3d30d1449e0e55b66d526298207c25238"
     }
   ],
   "news": []
