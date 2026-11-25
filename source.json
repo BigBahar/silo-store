@@ -322,6 +322,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "1.13",
+              "date": "2026-11-25T19:19:48Z",
+              "localizedDescription": "Claudex Remote 1.13: the new Cx logo.",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/claudex-remote-v1.13/ClaudexRemote.ipa",
+              "size": 582809,
+              "sha256": "07bcc086d009680c446a32007cfa1ab43ca9485b952b003471585d8d2f18208b"
+            },
+            {
               "version": "1.1",
               "date": "2026-11-22T18:29:40Z",
               "localizedDescription": "Claudex Remote 1.1",
@@ -332,12 +340,12 @@
           ]
         }
       ],
-      "version": "1.1",
-      "versionDate": "2026-11-22T18:29:40Z",
-      "versionDescription": "Claudex Remote 1.1",
-      "downloadURL": "https://bigbahar.github.io/silo-store/claudex-remote.ipa",
-      "size": 548902,
-      "sha256": "116c303e4486007ffe4e3de02b4a13d3d30d1449e0e55b66d526298207c25238"
+      "version": "1.13",
+      "versionDate": "2026-11-25T19:19:48Z",
+      "versionDescription": "Claudex Remote 1.13: the new Cx logo.",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/claudex-remote-v1.13/ClaudexRemote.ipa",
+      "size": 582809,
+      "sha256": "07bcc086d009680c446a32007cfa1ab43ca9485b952b003471585d8d2f18208b"
     }
   ],
   "news": []
