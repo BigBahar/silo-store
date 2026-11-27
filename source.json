@@ -322,6 +322,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "1.15",
+              "date": "2026-11-27T15:22:48Z",
+              "localizedDescription": "Folderless chats and connected agent workflows. Update Claudex on your PC to 0.4.14 first.",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/claudex-remote-v1.15/ClaudexRemote.ipa",
+              "size": 600846,
+              "sha256": "2e41d4c12a86ece56aa6c572b26031a78c918c79de655d7eca40b00952e7f9f5"
+            },
+            {
               "version": "1.13",
               "date": "2026-11-25T19:19:48Z",
               "localizedDescription": "Claudex Remote 1.13: the new Cx logo.",
@@ -340,12 +348,12 @@
           ]
         }
       ],
-      "version": "1.13",
-      "versionDate": "2026-11-25T19:19:48Z",
-      "versionDescription": "Claudex Remote 1.13: the new Cx logo.",
-      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/claudex-remote-v1.13/ClaudexRemote.ipa",
-      "size": 582809,
-      "sha256": "07bcc086d009680c446a32007cfa1ab43ca9485b952b003471585d8d2f18208b"
+      "version": "1.15",
+      "versionDate": "2026-11-27T15:22:48Z",
+      "versionDescription": "Folderless chats and connected agent workflows. Update Claudex on your PC to 0.4.14 first.",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/claudex-remote-v1.15/ClaudexRemote.ipa",
+      "size": 600846,
+      "sha256": "2e41d4c12a86ece56aa6c572b26031a78c918c79de655d7eca40b00952e7f9f5"
     }
   ],
   "news": []
