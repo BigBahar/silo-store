@@ -322,6 +322,14 @@
           "track": "stable",
           "releases": [
             {
+              "version": "1.16",
+              "date": "2026-11-27T20:40:18Z",
+              "localizedDescription": "Chat and Duet are now on the sessions screen. Requires Claudex desktop 0.4.14.",
+              "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/claudex-remote-v1.16/ClaudexRemote.ipa",
+              "size": 611319,
+              "sha256": "6f5d488b8ffa225fb921fa2aab7dcc77c00c2a4a8d9340a78f007ddcd46403db"
+            },
+            {
               "version": "1.15",
               "date": "2026-11-27T15:22:48Z",
               "localizedDescription": "Folderless chats and connected agent workflows. Update Claudex on your PC to 0.4.14 first.",
@@ -348,12 +356,12 @@
           ]
         }
       ],
-      "version": "1.15",
-      "versionDate": "2026-11-27T15:22:48Z",
-      "versionDescription": "Folderless chats and connected agent workflows. Update Claudex on your PC to 0.4.14 first.",
-      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/claudex-remote-v1.15/ClaudexRemote.ipa",
-      "size": 600846,
-      "sha256": "2e41d4c12a86ece56aa6c572b26031a78c918c79de655d7eca40b00952e7f9f5"
+      "version": "1.16",
+      "versionDate": "2026-11-27T20:40:18Z",
+      "versionDescription": "Chat and Duet are now on the sessions screen. Requires Claudex desktop 0.4.14.",
+      "downloadURL": "https://github.com/BigBahar/silo-store/releases/download/claudex-remote-v1.16/ClaudexRemote.ipa",
+      "size": 611319,
+      "sha256": "6f5d488b8ffa225fb921fa2aab7dcc77c00c2a4a8d9340a78f007ddcd46403db"
     }
   ],
   "news": []
